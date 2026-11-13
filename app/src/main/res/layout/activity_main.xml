@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@drawable/da_bg_oscuro">
+
+	<!-- Barra superior: logo + sentido (toque para cambiar ENTRADA/SALIDA) -->
+	<LinearLayout style="@style/DaTopbar">
+		<ImageView style="@style/DaLogo" />
+		<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+		<TextView
+			android:id="@+id/btnSentidoMain"
+			style="@style/DaPill"
+			android:background="@drawable/da_pill_entrada"
+			android:text="@string/sentido_entrada"
+			android:textColor="@color/da_verde_texto" />
+	</LinearLayout>
+
+	<!-- Centro: tocar abre la verificación facial -->
+	<LinearLayout
+		android:id="@+id/screen"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:orientation="vertical"
+		android:gravity="center"
+		android:clickable="true"
+		android:focusable="true">
+
+		<TextView
+			android:id="@+id/txtPuntoMain"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="#BFFFFFFF"
+			android:textSize="15sp"
+			android:fontFamily="@font/inter_semibold" />
+
+		<TextView
+			android:id="@+id/txtTime"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:textColor="#FFFFFFFF"
+			android:textSize="64sp"
+			android:letterSpacing="-0.02"
+			android:fontFamily="@font/inter_extrabold" />
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<TextView
+				android:id="@+id/txtWeek"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="5dp"
+				android:layout_marginEnd="5dp"
+				android:textColor="#CCFFFFFF"
+				android:textSize="17sp" />
+			<TextView
+				android:id="@+id/txtDate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="#CCFFFFFF"
+				android:textSize="17sp" />
+		</LinearLayout>
+
+		<FrameLayout
+			android:layout_width="170dp"
+			android:layout_height="170dp"
+			android:layout_marginTop="32dp"
+			android:background="@drawable/da_anillo_rostro">
+			<ImageView
+				android:layout_width="64dp"
+				android:layout_height="64dp"
+				android:layout_gravity="center"
+				android:src="@drawable/ic_da_rostro"
+				android:tint="@color/da_cian"
+				android:importantForAccessibility="no" />
+		</FrameLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="14dp"
+			android:text="@string/acerquese"
+			android:textColor="#D9FFFFFF"
+			android:textSize="16sp" />
+	</LinearLayout>
+
+	<!-- Abajo: validar con cédula + estado -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp"
+		android:background="@color/da_oscuro">
+
+		<LinearLayout android:id="@+id/btnCedulaMain" style="@style/DaBotonPrimario">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_cedula" />
+			<TextView style="@style/DaBotonTexto" android:text="@string/validar_con_cedula" />
+		</LinearLayout>
+
+		<TextView
+			android:id="@+id/txtStat"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:gravity="center"
+			android:textColor="@color/da_texto_3"
+			android:textSize="13sp" />
+	</LinearLayout>
+</LinearLayout>

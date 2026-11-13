@@ -1,0 +1,195 @@
+<resources>
+
+	<!-- Tema base DIGIACCESS: tipografía Inter y paleta de digiaccessoikos.com -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:windowBackground">@color/bg</item>
+		<item name="android:windowFullscreen">true</item>
+		<item name="actionBarSize">48dp</item>
+		<item name="android:fontFamily">@font/inter</item>
+		<item name="fontFamily">@font/inter</item>
+		<item name="android:textColorPrimary">@color/da_texto</item>
+	</style>
+	<style name="AppThemeNoTitle" parent="Theme.AppCompat.Light.DarkActionBar">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:windowBackground">@color/bgMain</item>
+		<item name="windowNoTitle">true</item>
+		<item name="windowActionBar">false</item>
+		<item name="android:windowFullscreen">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:fontFamily">@font/inter</item>
+		<item name="fontFamily">@font/inter</item>
+	</style>
+	<style name="SwitchButton" parent="@android:style/Widget.CompoundButton">
+		<item name="android:button">@drawable/da_switch</item>
+	</style>
+
+	<!-- Barra superior blanca con el logo -->
+	<style name="DaTopbar">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">56dp</item>
+		<item name="android:background">@drawable/da_topbar</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:paddingLeft">16dp</item>
+		<item name="android:paddingRight">16dp</item>
+		<item name="android:elevation">4dp</item>
+	</style>
+	<style name="DaLogo">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">30dp</item>
+		<item name="android:adjustViewBounds">true</item>
+		<item name="android:src">@drawable/da_logo</item>
+		<item name="android:contentDescription">@string/app_name</item>
+	</style>
+	<style name="DaPill">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:paddingLeft">14dp</item>
+		<item name="android:paddingRight">14dp</item>
+		<item name="android:paddingTop">7dp</item>
+		<item name="android:paddingBottom">7dp</item>
+		<item name="android:textSize">13sp</item>
+		<item name="android:fontFamily">@font/inter_bold</item>
+		<item name="android:letterSpacing">0.03</item>
+	</style>
+
+	<!-- Botones: contenedor horizontal con ícono + texto -->
+	<style name="DaBoton">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">56dp</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:gravity">center</item>
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
+	</style>
+	<style name="DaBotonPrimario" parent="DaBoton">
+		<item name="android:background">@drawable/da_btn_primario</item>
+		<item name="android:elevation">3dp</item>
+	</style>
+	<style name="DaBotonSecundario" parent="DaBoton">
+		<item name="android:background">@drawable/da_btn_secundario</item>
+	</style>
+	<style name="DaBotonIcono">
+		<item name="android:layout_width">22dp</item>
+		<item name="android:layout_height">22dp</item>
+		<item name="android:layout_marginRight">8dp</item>
+		<item name="android:layout_marginEnd">8dp</item>
+		<item name="android:importantForAccessibility">no</item>
+	</style>
+	<style name="DaBotonTexto">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textColor">#FFFFFFFF</item>
+		<item name="android:textSize">16sp</item>
+		<item name="android:fontFamily">@font/inter_semibold</item>
+	</style>
+	<!-- Botón de texto (pantallas claras) -->
+	<style name="DaBotonPlano">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">52dp</item>
+		<item name="android:textAllCaps">false</item>
+		<item name="android:textSize">15sp</item>
+		<item name="android:fontFamily">@font/inter_semibold</item>
+		<item name="android:stateListAnimator">@null</item>
+	</style>
+	<style name="DaBotonPlanoPrimario" parent="DaBotonPlano">
+		<item name="android:background">@drawable/da_btn_primario</item>
+		<item name="android:textColor">#FFFFFFFF</item>
+	</style>
+	<style name="DaBotonPlanoPeligro" parent="DaBotonPlano">
+		<item name="android:background">@drawable/da_btn_peligro</item>
+		<item name="android:textColor">@color/da_rojo_texto</item>
+	</style>
+	<style name="DaAyuda">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">6dp</item>
+		<item name="android:textSize">12.5sp</item>
+		<item name="android:textColor">@color/da_texto_2</item>
+	</style>
+	<style name="DaBotonPlanoClaro" parent="DaBotonPlano">
+		<item name="android:background">@drawable/da_btn_claro</item>
+		<item name="android:textColor">@color/da_texto</item>
+	</style>
+
+	<!-- Tarjeta blanca -->
+	<style name="DaCard">
+		<item name="android:background">@drawable/da_card</item>
+		<item name="android:elevation">8dp</item>
+		<item name="android:padding">20dp</item>
+	</style>
+	<style name="DaIconBox">
+		<item name="android:layout_width">64dp</item>
+		<item name="android:layout_height">64dp</item>
+		<item name="android:padding">14dp</item>
+		<item name="android:importantForAccessibility">no</item>
+	</style>
+
+	<!-- Filas de datos del resultado -->
+	<style name="DaFilaEtiqueta">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textSize">14sp</item>
+		<item name="android:textColor">@color/da_texto_2</item>
+	</style>
+	<style name="DaFilaValor">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textSize">14sp</item>
+		<item name="android:textColor">@color/da_texto</item>
+		<item name="android:fontFamily">@font/inter_semibold</item>
+	</style>
+	<style name="DaFila">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:paddingTop">10dp</item>
+		<item name="android:paddingBottom">10dp</item>
+	</style>
+
+	<!-- Formularios -->
+	<style name="DaEtiqueta">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">14dp</item>
+		<item name="android:layout_marginBottom">6dp</item>
+		<item name="android:textSize">13sp</item>
+		<item name="android:fontFamily">@font/inter_semibold</item>
+		<item name="android:textColor">#FF374151</item>
+	</style>
+	<style name="DaCampo">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">48dp</item>
+		<item name="android:textSize">15sp</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:background">@drawable/da_input</item>
+		<item name="android:paddingLeft">12dp</item>
+		<item name="android:paddingRight">12dp</item>
+		<item name="android:textColor">@color/da_texto</item>
+		<item name="android:textColorHint">@color/da_texto_3</item>
+	</style>
+	<style name="DaChip">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_height">44dp</item>
+		<item name="android:button">@null</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textSize">14sp</item>
+		<item name="android:fontFamily">@font/inter_bold</item>
+	</style>
+	<style name="DaChipVerde" parent="DaChip">
+		<item name="android:background">@drawable/da_chip_verde</item>
+		<item name="android:textColor">@color/da_chip_texto_verde</item>
+	</style>
+	<style name="DaChipAzul" parent="DaChip">
+		<item name="android:background">@drawable/da_chip_azul</item>
+		<item name="android:textColor">@color/da_chip_texto_azul</item>
+	</style>
+
+</resources>

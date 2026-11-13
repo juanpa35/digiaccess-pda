@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Paleta DIGIACCESS (tomada de digiaccessoikos.com) -->
+	<color name="colorPrimary">#667EEA</color>
+	<color name="colorPrimaryDark">#764BA2</color>
+	<color name="colorAccent">#3B82F6</color>
+	<color name="bgMain">#111827</color>
+	<color name="bgVideo">#0000FF</color>
+	<color name="bg">#F9FAFB</color>
+
+	<color name="da_morado_1">#667EEA</color>
+	<color name="da_morado_2">#764BA2</color>
+	<color name="da_azul">#3B82F6</color>
+	<color name="da_cian">#06B6D4</color>
+	<color name="da_texto">#1F2937</color>
+	<color name="da_texto_2">#6B7280</color>
+	<color name="da_texto_3">#9CA3AF</color>
+	<color name="da_borde">#E5E7EB</color>
+	<color name="da_fondo_claro">#F9FAFB</color>
+	<color name="da_oscuro">#111827</color>
+	<color name="da_verde">#10B981</color>
+	<color name="da_verde_texto">#059669</color>
+	<color name="da_rojo">#EF4444</color>
+	<color name="da_rojo_texto">#DC2626</color>
+	<color name="da_ambar">#F59E0B</color>
+	<color name="da_ambar_texto">#D97706</color>
+	<color name="da_blanco">#FFFFFF</color>
+</resources>

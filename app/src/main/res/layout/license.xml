@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@drawable/da_bg_morado">
+
+	<include layout="@layout/da_encabezado" />
+
+	<ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true">
+	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="20dp">
+		<LinearLayout style="@style/DaCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="22dp">
+			<ImageView style="@style/DaIconBox" android:layout_width="64dp" android:layout_height="64dp" android:layout_gravity="center_horizontal" android:padding="16dp" android:background="@drawable/da_icbox_azul" android:src="@drawable/ic_da_escudo" />
+			<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:gravity="center" android:text="@string/licencia_titulo" android:textColor="@color/da_texto" android:textSize="20sp" android:fontFamily="@font/inter_bold" />
+			<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:gravity="center" android:text="@string/licencia_ayuda" android:textColor="@color/da_texto_2" android:textSize="13.5sp" />
+
+			<TextView android:id="@+id/prompt" style="@style/DaEtiqueta" android:text="@string/prompt_runcode" />
+			<TextView
+				android:id="@+id/runCode"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:background="@drawable/da_mono"
+				android:fontFamily="monospace"
+				android:textIsSelectable="true"
+				android:text="@string/hint_runcode"
+				android:textColor="@color/da_texto"
+				android:textSize="15sp" />
+
+			<TextView android:id="@+id/prompt2" style="@style/DaEtiqueta" android:text="@string/prompt_regcode" />
+			<EditText
+				android:id="@+id/regCode"
+				style="@style/DaCampo"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:paddingTop="10dp"
+				android:paddingBottom="10dp"
+				android:singleLine="false"
+				android:fontFamily="monospace"
+				android:hint="@string/hint_regcode"
+				android:inputType="textMultiLine|textNoSuggestions"
+				android:autofillHints="" />
+
+			<Button android:id="@+id/ok" style="@style/DaBotonPlanoPrimario" android:layout_marginTop="16dp" android:text="@string/activar" />
+
+			<TextView
+				android:id="@+id/warn_prompt"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="14dp"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_aviso"
+				android:lineSpacingExtra="2dp"
+				android:text="@string/warm_tips_regcode"
+				android:textColor="@color/da_ambar_texto"
+				android:textSize="13sp" />
+		</LinearLayout>
+	</LinearLayout>
+	</ScrollView>
+</LinearLayout>

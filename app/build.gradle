@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            storeFile file('../keystore/key.jks')
+            storePassword 'chingzou24406083'
+            keyAlias = 'key0'
+            keyPassword 'chingzou24406083'
+        }
+        debug {
+            storeFile file('../keystore/key.jks')
+            storePassword 'chingzou24406083'
+            keyAlias = 'key0'
+            keyPassword 'chingzou24406083'
+        }
+    }
+    compileSdkVersion 33
+    defaultConfig {
+        applicationId "com.FaceVerifyM8"
+        minSdkVersion 16
+        targetSdkVersion 33
+        versionCode 100
+        versionName "1.0-digiaccess"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 启用 MultiDex
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            // IMPORTANTE: firmar SIEMPRE con keystore/key.jks. La licencia del SDK facial depende de la firma.
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+	namespace 'com.FaceVerifyM8'
+	lint {
+		// Las advertencias de lint (API nuevas en estilos, etc.) no deben detener la compilación
+		abortOnError false
+		checkReleaseBuilds false
+	}
+	applicationVariants.configureEach {
+        variant->variant.outputs.configureEach {
+            output->outputFileName = "DIGIACCESS-PDA.apk"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'androidx.media:media:1.6.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- Request CAMERA permission -->
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-feature android:name="android.permission.camera" />
+	<uses-feature
+		android:name="android.hardware.camera"
+		android:required="false" />
+
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+	<uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+	<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+	<!-- 读取电话状态权限 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<application
+		android:allowBackup="false"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:supportsRtl="true"
+		android:requestLegacyExternalStorage="true"
+		android:extractNativeLibs="true"
+		android:theme="@style/AppTheme"
+		android:usesCleartextTraffic="true"
+		android:networkSecurityConfig="@xml/network_security_config"
+		tools:targetApi="m">
+		<activity android:name=".MainActivity"
+			android:exported="true"
+			android:label="@string/app_name"
+			android:theme="@style/AppThemeNoTitle">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".VideoActivity" android:label="@string/title_verify"
+			android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".PasswordActivity" android:label="@string/title_password" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".FunctionsActivity" android:label="@string/title_func" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".UsersActivity" android:label="@string/title_users" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".UserActivity" android:label="@string/title_user_edit" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".RecordsActivity" android:label="@string/title_records" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".SettingActivity" android:label="@string/title_setting" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".LicenseActivity" android:label="@string/title_license" android:theme="@style/AppThemeNoTitle" />
+		<activity android:name=".CedulaActivity" android:label="@string/title_cedula"
+			android:theme="@style/AppThemeNoTitle"
+			android:windowSoftInputMode="stateHidden" />
+		<activity android:name=".DigiAccessActivity" android:label="@string/title_digiaccess"
+			android:theme="@style/AppThemeNoTitle"
+			android:windowSoftInputMode="stateHidden|adjustResize" />
+
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="com.FaceVerifyM8.fileprovider"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths" />
+		</provider>
+	</application>
+</manifest>

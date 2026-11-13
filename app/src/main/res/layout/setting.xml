@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/da_fondo_claro">
+
+	<include layout="@layout/da_encabezado" />
+
+	<ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_setting" android:textColor="@color/da_texto" android:textSize="22sp" android:fontFamily="@font/inter_bold" />
+		<LinearLayout style="@style/DaCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:elevation="2dp" android:orientation="vertical" android:padding="16dp">
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sec_reconocimiento" android:textColor="@color/da_texto" android:textSize="17sp" android:fontFamily="@font/inter_bold" />
+			<TextView android:id="@+id/tvThresholdVerify" style="@style/DaEtiqueta" android:text="@string/prompt_threshold_verify" />
+			<EditText android:id="@+id/etThresholdVerify" style="@style/DaCampo" android:hint="@string/hint_threshold_verify" android:inputType="number" android:autofillHints="" />
+			<TextView style="@style/DaAyuda" android:text="@string/ayuda_umbral" />
+			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:orientation="horizontal" android:gravity="center_vertical">
+				<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+					<TextView android:id="@+id/tvLiveStat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/prompt_live_stat" android:textColor="@color/da_texto" android:textSize="15sp" android:fontFamily="@font/inter_semibold" />
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ayuda_vida" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+				</LinearLayout>
+				<ToggleButton android:id="@+id/tbLiveStat" style="@style/SwitchButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@null" android:checked="true" android:textOff="@null" android:textOn="@null" />
+			</LinearLayout>
+			<TextView android:id="@+id/tvThresholdLive" style="@style/DaEtiqueta" android:text="@string/prompt_threshold_live" />
+			<EditText android:id="@+id/etThresholdLive" style="@style/DaCampo" android:hint="@string/hint_threshold_live" android:inputType="number" android:autofillHints="" />
+			<TextView android:id="@+id/tvThresholdEyes" style="@style/DaEtiqueta" android:text="@string/prompt_threshold_eyes" />
+			<EditText android:id="@+id/etThresholdEyes" style="@style/DaCampo" android:hint="@string/hint_threshold_eyes" android:inputType="number" android:autofillHints="" />
+			<TextView style="@style/DaAyuda" android:text="@string/ayuda_ojos" />
+		</LinearLayout>
+		<LinearLayout style="@style/DaCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:elevation="2dp" android:orientation="vertical" android:padding="16dp">
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sec_seguridad" android:textColor="@color/da_texto" android:textSize="17sp" android:fontFamily="@font/inter_bold" />
+			<TextView android:id="@+id/tvPassword" style="@style/DaEtiqueta" android:text="@string/prompt_password" />
+			<EditText android:id="@+id/etPassword" style="@style/DaCampo" android:hint="@string/hint_password" android:inputType="textPassword" android:autofillHints="" />
+			<TextView android:id="@+id/tvPassword2" style="@style/DaEtiqueta" android:text="@string/prompt_password2" />
+			<EditText android:id="@+id/etPassword2" style="@style/DaCampo" android:hint="@string/hint_password2" android:inputType="textPassword" android:autofillHints="" />
+		</LinearLayout>
+		<LinearLayout style="@style/DaCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:elevation="2dp" android:orientation="vertical" android:padding="16dp">
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sec_depuracion" android:textColor="@color/da_texto" android:textSize="17sp" android:fontFamily="@font/inter_bold" />
+			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:orientation="horizontal" android:gravity="center_vertical">
+				<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+					<TextView android:id="@+id/tvDebug" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/depuracion_fps" android:textColor="@color/da_texto" android:textSize="15sp" android:fontFamily="@font/inter_semibold" />
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ayuda_fps" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+				</LinearLayout>
+				<ToggleButton android:id="@+id/tbDebug" style="@style/SwitchButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@null" android:checked="true" android:textOff="@null" android:textOn="@null" />
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+	</ScrollView>
+
+	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:background="#FFFFFFFF" android:elevation="6dp">
+		<Button android:id="@+id/btnCancel" style="@style/DaBotonPlanoClaro" android:layout_width="0dp" android:layout_weight="1" android:text="@string/cancel" />
+		<View android:layout_width="10dp" android:layout_height="1dp" />
+		<Button android:id="@+id/btnOK" style="@style/DaBotonPlanoPrimario" android:layout_width="0dp" android:layout_weight="1" android:text="@string/save" />
+	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@drawable/da_bg_morado">
+
+	<LinearLayout style="@style/DaTopbar">
+		<ImageView style="@style/DaLogo" />
+		<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+		<TextView
+			android:id="@+id/btnSentido"
+			style="@style/DaPill"
+			android:background="@drawable/da_pill_entrada"
+			android:text="@string/sentido_entrada"
+			android:textColor="@color/da_verde_texto" />
+	</LinearLayout>
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:gravity="center"
+		android:text="@string/validar_con_cedula"
+		android:textColor="#FFFFFFFF"
+		android:textSize="22sp"
+		android:fontFamily="@font/inter_bold" />
+	<TextView
+		android:id="@+id/txtPunto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="2dp"
+		android:gravity="center"
+		android:textColor="#D9FFFFFF"
+		android:textSize="14sp" />
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:layout_marginLeft="16dp"
+		android:layout_marginRight="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginBottom="16dp">
+
+		<!-- Estado: esperando lectura / validando -->
+		<LinearLayout
+			android:id="@+id/cardEspera"
+			style="@style/DaCard"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:gravity="center">
+
+			<ImageView
+				android:id="@+id/ivEspera"
+				style="@style/DaIconBox"
+				android:layout_width="84dp"
+				android:layout_height="84dp"
+				android:padding="20dp"
+				android:background="@drawable/da_icbox_azul"
+				android:src="@drawable/ic_da_scan" />
+
+			<TextView
+				android:id="@+id/txtEsperaTitulo"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="18dp"
+				android:gravity="center"
+				android:text="@string/cedula_escanee"
+				android:textColor="@color/da_texto"
+				android:textSize="22sp"
+				android:fontFamily="@font/inter_bold" />
+
+			<TextView
+				android:id="@+id/txtEsperaAyuda"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:gravity="center"
+				android:lineSpacingExtra="3dp"
+				android:text="@string/cedula_ayuda"
+				android:textColor="@color/da_texto_2"
+				android:textSize="15sp" />
+		</LinearLayout>
+
+		<!-- Estado: resultado -->
+		<LinearLayout
+			android:id="@+id/cardResultado"
+			style="@style/DaCard"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:visibility="gone">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center_vertical"
+				android:paddingBottom="16dp">
+				<ImageView
+					android:id="@+id/ivResultado"
+					style="@style/DaIconBox"
+					android:background="@drawable/da_icbox_ok"
+					android:src="@drawable/ic_da_check" />
+				<TextView
+					android:id="@+id/txtResultado"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="16dp"
+					android:layout_marginStart="16dp"
+					android:textColor="@color/da_verde_texto"
+					android:textSize="22sp"
+					android:lineSpacingExtra="-2dp"
+					android:fontFamily="@font/inter_extrabold" />
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/txtNombre"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="6dp"
+				android:textColor="@color/da_texto"
+				android:textSize="19sp"
+				android:fontFamily="@font/inter_bold" />
+
+			<View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" />
+			<LinearLayout style="@style/DaFila">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_cedula" />
+				<TextView android:id="@+id/txtCedula" style="@style/DaFilaValor" />
+			</LinearLayout>
+			<View android:id="@+id/divEmpresa" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" />
+			<LinearLayout android:id="@+id/filaEmpresaDatos" style="@style/DaFila">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_empresa" />
+				<TextView android:id="@+id/txtEmpresa" style="@style/DaFilaValor" />
+			</LinearLayout>
+			<View android:id="@+id/divTipo" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" />
+			<LinearLayout android:id="@+id/filaTipo" style="@style/DaFila">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_tipo" />
+				<TextView android:id="@+id/txtTipo" style="@style/DaFilaValor" />
+			</LinearLayout>
+			<View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" />
+			<LinearLayout style="@style/DaFila">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_hora" />
+				<TextView android:id="@+id/txtHora" style="@style/DaFilaValor" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/boxMensaje"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:orientation="horizontal"
+				android:gravity="center_vertical"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_error">
+				<ImageView
+					android:id="@+id/ivMensaje"
+					android:layout_width="20dp"
+					android:layout_height="20dp"
+					android:layout_marginRight="8dp"
+					android:layout_marginEnd="8dp"
+					android:src="@drawable/ic_da_alerta_circulo"
+					android:tint="@color/da_rojo_texto"
+					android:importantForAccessibility="no" />
+				<TextView
+					android:id="@+id/txtMensaje"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:textColor="@color/da_rojo_texto"
+					android:textSize="15sp"
+					android:fontFamily="@font/inter_semibold" />
+			</LinearLayout>
+		</LinearLayout>
+	</FrameLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingBottom="18dp">
+
+		<LinearLayout android:id="@+id/btnDigitar" style="@style/DaBotonPrimario">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_teclado" />
+			<TextView style="@style/DaBotonTexto" android:text="@string/cedula_digitar" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/btnRostro"
+			style="@style/DaBotonSecundario"
+			android:layout_height="52dp"
+			android:layout_marginTop="10dp">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_rostro" />
+			<TextView style="@style/DaBotonTexto" android:textSize="15sp" android:text="@string/cedula_rostro" />
+		</LinearLayout>
+
+		<LinearLayout android:id="@+id/btnSiguiente" style="@style/DaBotonPrimario" android:visibility="gone">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_scan" />
+			<TextView style="@style/DaBotonTexto" android:text="@string/siguiente_lectura" />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

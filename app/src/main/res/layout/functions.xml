@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/da_fondo_claro">
+
+	<include layout="@layout/da_encabezado" />
+
+	<ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp">
+
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_func" android:textColor="@color/da_texto" android:textSize="22sp" android:fontFamily="@font/inter_bold" />
+
+		<!-- Conexión DIGIACCESS (destacada) -->
+		<LinearLayout
+			android:id="@+id/btnDigiAccess"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="14dp"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:padding="18dp"
+			android:background="@drawable/da_btn_primario"
+			android:elevation="4dp"
+			android:clickable="true"
+			android:focusable="true">
+			<ImageView android:layout_width="44dp" android:layout_height="44dp" android:padding="10dp" android:src="@drawable/ic_da_conectar" android:background="@drawable/da_btn_secundario" android:importantForAccessibility="no" />
+			<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginLeft="14dp" android:layout_marginStart="14dp" android:orientation="vertical">
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cfg_titulo" android:textColor="#FFFFFFFF" android:textSize="17sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/func_digiaccess_sub" android:textColor="#E6FFFFFF" android:textSize="13sp" />
+			</LinearLayout>
+		</LinearLayout>
+
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+			<LinearLayout
+				android:id="@+id/imgUsers"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:orientation="vertical"
+				android:padding="16dp"
+				android:background="@drawable/da_item"
+				android:elevation="2dp"
+				android:clickable="true"
+				android:focusable="true">
+				<ImageView style="@style/DaIconBox" android:layout_width="48dp" android:layout_height="48dp" android:padding="12dp" android:background="@drawable/da_icbox_azul" android:src="@drawable/ic_da_rostros" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/title_users" android:textColor="@color/da_texto" android:textSize="16sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/func_rostros_sub" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+			</LinearLayout>
+			<View android:layout_width="12dp" android:layout_height="1dp" />
+			<LinearLayout
+				android:id="@+id/imgRecords"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:orientation="vertical"
+				android:padding="16dp"
+				android:background="@drawable/da_item"
+				android:elevation="2dp"
+				android:clickable="true"
+				android:focusable="true">
+				<ImageView style="@style/DaIconBox" android:layout_width="48dp" android:layout_height="48dp" android:padding="12dp" android:background="@drawable/da_icbox_ok" android:src="@drawable/ic_da_registros" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/title_records" android:textColor="@color/da_texto" android:textSize="16sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/func_registros_sub" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+			</LinearLayout>
+		</LinearLayout>
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+			<LinearLayout
+				android:id="@+id/imgLoadUsers"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:orientation="vertical"
+				android:padding="16dp"
+				android:background="@drawable/da_item"
+				android:elevation="2dp"
+				android:clickable="true"
+				android:focusable="true">
+				<ImageView style="@style/DaIconBox" android:layout_width="48dp" android:layout_height="48dp" android:padding="12dp" android:background="@drawable/da_icbox_azul" android:src="@drawable/ic_da_cargar" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/title_loadusers" android:textColor="@color/da_texto" android:textSize="16sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/func_cargar_sub" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+			</LinearLayout>
+			<View android:layout_width="12dp" android:layout_height="1dp" />
+			<LinearLayout
+				android:id="@+id/imgExport"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:orientation="vertical"
+				android:padding="16dp"
+				android:background="@drawable/da_item"
+				android:elevation="2dp"
+				android:clickable="true"
+				android:focusable="true">
+				<ImageView style="@style/DaIconBox" android:layout_width="48dp" android:layout_height="48dp" android:padding="12dp" android:background="@drawable/da_icbox_aviso" android:src="@drawable/ic_da_exportar" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/title_export" android:textColor="@color/da_texto" android:textSize="16sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/func_exportar_sub" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+			</LinearLayout>
+		</LinearLayout>
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+			<LinearLayout
+				android:id="@+id/imgSetting"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:orientation="vertical"
+				android:padding="16dp"
+				android:background="@drawable/da_item"
+				android:elevation="2dp"
+				android:clickable="true"
+				android:focusable="true">
+				<ImageView style="@style/DaIconBox" android:layout_width="48dp" android:layout_height="48dp" android:padding="12dp" android:background="@drawable/da_icbox_azul" android:src="@drawable/ic_da_ajustes2" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/title_setting" android:textColor="@color/da_texto" android:textSize="16sp" android:fontFamily="@font/inter_bold" />
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/func_ajustes_sub" android:textColor="@color/da_texto_2" android:textSize="12.5sp" />
+			</LinearLayout>
+			<View android:layout_width="12dp" android:layout_height="1dp" />
+			<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+		</LinearLayout>
+
+	</LinearLayout>
+	</ScrollView>
+</LinearLayout>

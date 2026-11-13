@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/da_fondo_claro">
+
+	<include layout="@layout/da_encabezado" />
+
+	<!-- Búsqueda (oculta, igual que en la demo original) -->
+	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone">
+		<TextView android:id="@+id/txtPromptNo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/prompt_no" />
+		<EditText android:id="@+id/txtNo" android:layout_width="180dp" android:layout_height="wrap_content" android:inputType="number" android:hint="@string/hint_no" android:autofillHints="" />
+		<Button android:id="@+id/btnSearch" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_search" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="16dp">
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/rostros_titulo" android:textColor="@color/da_texto" android:textSize="22sp" android:fontFamily="@font/inter_bold" />
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/rostros_ayuda" android:textColor="@color/da_texto_2" android:textSize="13sp" />
+	</LinearLayout>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/lvUser"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:paddingLeft="10dp"
+		android:paddingRight="10dp"
+		android:paddingTop="8dp"
+		android:clipToPadding="false" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp"
+		android:background="#FFFFFFFF"
+		android:elevation="6dp">
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+			<Button android:id="@+id/btnAdd" style="@style/DaBotonPlanoPrimario" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:text="@string/title_user_new" />
+			<View android:layout_width="10dp" android:layout_height="1dp" />
+			<Button android:id="@+id/btnEdit" style="@style/DaBotonPlanoClaro" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:text="@string/title_user_edit" />
+		</LinearLayout>
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+			<Button android:id="@+id/btnRemove" style="@style/DaBotonPlanoPeligro" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:text="@string/title_user_remove" />
+			<View android:layout_width="10dp" android:layout_height="1dp" />
+			<Button android:id="@+id/btnClear" style="@style/DaBotonPlanoPeligro" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:text="@string/title_user_clear" />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

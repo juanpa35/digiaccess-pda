@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Encabezado de las pantallas de administración: atrás + logo + título -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/DaTopbar"
+	android:paddingLeft="6dp">
+	<ImageView
+		android:id="@+id/btnAtras"
+		android:layout_width="44dp"
+		android:layout_height="44dp"
+		android:padding="10dp"
+		android:background="@drawable/da_btn_atras"
+		android:src="@drawable/ic_da_atras"
+		android:tint="@color/da_texto"
+		android:contentDescription="@string/volver" />
+	<ImageView style="@style/DaLogo" android:layout_height="26dp" android:layout_marginLeft="4dp" android:layout_marginStart="4dp" />
+	<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+	<TextView
+		android:id="@+id/txtEncabezado"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="@color/da_texto_2"
+		android:textSize="15sp"
+		android:fontFamily="@font/inter_semibold" />
+</LinearLayout>

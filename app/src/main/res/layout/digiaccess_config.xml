@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/da_fondo_claro">
+
+	<include layout="@layout/da_encabezado" />
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="18dp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/cfg_titulo"
+				android:textColor="@color/da_texto"
+				android:textSize="21sp"
+				android:fontFamily="@font/inter_bold" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_validar_url" />
+			<EditText
+				android:id="@+id/etValidarUrl"
+				style="@style/DaCampo"
+				android:hint="https://servidor/validar_acceso.php"
+				android:inputType="textUri" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_sync_url" />
+			<EditText
+				android:id="@+id/etSyncUrl"
+				style="@style/DaCampo"
+				android:hint="https://servidor/pda_sync.php"
+				android:inputType="textUri" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_token" />
+			<EditText
+				android:id="@+id/etToken"
+				style="@style/DaCampo"
+				android:inputType="textPassword" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_punto" />
+			<EditText
+				android:id="@+id/etPunto"
+				style="@style/DaCampo"
+				android:hint="PDA Molinete Principal"
+				android:inputType="text" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_sentido" />
+			<RadioGroup
+				android:id="@+id/rgSentido"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+				<RadioButton android:id="@+id/rbEntrada" style="@style/DaChipVerde" android:text="@string/chip_entrada" android:layout_marginRight="8dp" android:layout_marginEnd="8dp" />
+				<RadioButton android:id="@+id/rbSalida" style="@style/DaChipVerde" android:text="@string/chip_salida" />
+			</RadioGroup>
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_carril" />
+			<RadioGroup
+				android:id="@+id/rgCarril"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+				<RadioButton android:id="@+id/rbPeatonal" style="@style/DaChipAzul" android:text="@string/carril_peatonal" android:layout_marginRight="8dp" android:layout_marginEnd="8dp" />
+				<RadioButton android:id="@+id/rbVehicular" style="@style/DaChipAzul" android:text="@string/carril_vehicular" />
+			</RadioGroup>
+
+			<CheckBox
+				android:id="@+id/cbSinConexion"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_sin_conexion" />
+
+			<CheckBox
+				android:id="@+id/cbEliminarRostros"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_eliminar_rostros" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_sync_minutos" />
+			<EditText
+				android:id="@+id/etSyncMin"
+				style="@style/DaCampo"
+				android:inputType="number" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_scanner_accion" />
+			<EditText
+				android:id="@+id/etScannerAccion"
+				style="@style/DaCampo"
+				android:hint="@string/opcional"
+				android:inputType="text" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_scanner_extra" />
+			<EditText
+				android:id="@+id/etScannerExtra"
+				style="@style/DaCampo"
+				android:hint="@string/opcional"
+				android:inputType="text" />
+
+			<TextView
+				android:id="@+id/txtEstadoSync"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="20dp"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_info"
+				android:lineSpacingExtra="3dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp" />
+
+			<Button android:id="@+id/btnProbar" style="@style/DaBotonPlanoPrimario" android:layout_marginTop="14dp" android:text="@string/cfg_probar" />
+			<Button android:id="@+id/btnGuardar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_guardar" />
+			<Button android:id="@+id/btnSincronizar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_sincronizar" />
+			<Button android:id="@+id/btnDepurar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_depurar" />
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

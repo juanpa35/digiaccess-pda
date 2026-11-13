@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_margin="6dp"
+	android:orientation="horizontal"
+	android:gravity="center_vertical"
+	android:padding="10dp"
+	android:background="@drawable/da_item">
+	<ImageView
+		android:id="@+id/imgPhoto"
+		android:layout_width="52dp"
+		android:layout_height="64dp"
+		android:scaleType="centerCrop"
+		android:background="@drawable/da_mono"
+		android:src="@drawable/ic_da_usuario"
+			android:tint="@color/da_texto_3"
+		android:contentDescription="@string/prompt_userphoto" />
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginStart="10dp"
+		android:orientation="vertical">
+		<TextView
+			android:id="@+id/txtName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:maxLines="2"
+			android:ellipsize="end"
+			android:textColor="@color/da_texto"
+			android:textSize="14sp"
+			android:fontFamily="@font/inter_bold" />
+		<TextView
+			android:id="@+id/txtNo"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="2dp"
+			android:singleLine="true"
+			android:textColor="@color/da_texto_2"
+			android:textSize="13sp" />
+	</LinearLayout>
+</LinearLayout>
