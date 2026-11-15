@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	private volatile long tUltimaSync = 0;
 	private volatile String strSync = "";
 	private TextView txtPuntoMain;
-	private TextView btnSentidoMain;
+
 	public static final Locale LOCALE_CO = new Locale("es", "CO");
 
 	// camera objects
@@ -523,11 +523,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 		// ---------------- DIGIACCESS ----------------
 		txtPuntoMain = findViewById(R.id.txtPuntoMain);
-		btnSentidoMain = findViewById(R.id.btnSentidoMain);
-		btnSentidoMain.setOnClickListener(v -> {
-			Config.alternarSentido(this);
-			mostrarSentido();
-		});
+		// Sentido y carril: el operador los cambia sin clave de administrador
+		com.digiaccess.Modo.conectarSegmentos(this, R.id.segEntrada, R.id.segSalida, R.id.segPeatonal, R.id.segVehicular, this::mostrarSentido);
 		findViewById(R.id.btnCedulaMain).setOnClickListener(v -> abrirCedula(null, null));
 
 		// Lector 2D: una lectura en la pantalla principal abre la validación con cédula
@@ -564,7 +561,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void mostrarSentido() {
 		Config cfg = Config.load(this);
-		CedulaActivity.pintarSentido(btnSentidoMain, cfg.sentido);
+		com.digiaccess.Modo.pintarSegmentos(this, R.id.segEntrada, R.id.segSalida, R.id.segPeatonal, R.id.segVehicular);
 		txtPuntoMain.setText(cfg.punto);
 	}
 

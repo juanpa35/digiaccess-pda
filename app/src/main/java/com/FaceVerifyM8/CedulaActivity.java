@@ -94,10 +94,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         btnRostro = findViewById(R.id.btnRostro);
         btnSiguiente = findViewById(R.id.btnSiguiente);
 
-        btnSentido.setOnClickListener(v -> {
-            Config.alternarSentido(this);
-            mostrarSentido();
-        });
+        // Sentido y carril: el operador los cambia tocando las píldoras
+        com.digiaccess.Modo.conectarPildoras(this, R.id.btnSentido, R.id.btnCarril, this::mostrarSentido);
         btnDigitar.setOnClickListener(v -> pedirNumero(null));
         btnRostro.setOnClickListener(v -> {
             startActivity(new Intent(this, VideoActivity.class));
@@ -334,16 +332,13 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private void mostrarSentido() {
         Config cfg = Config.load(this);
-        pintarSentido(btnSentido, cfg.sentido);
-        txtPunto.setText(cfg.punto + " · " + (Config.VEHICULAR.equals(cfg.carril) ? "Vehicular" : "Peatonal"));
+        com.digiaccess.Modo.pintar(this, R.id.btnSentido, R.id.btnCarril);
+        txtPunto.setText(com.digiaccess.Modo.puntoYCarril(cfg));
     }
 
     /** Píldora ENTRADA (verde) / SALIDA (ámbar) de la barra superior. */
     static void pintarSentido(TextView pill, String sentido) {
-        boolean entrada = Config.ENTRADA.equals(sentido);
-        pill.setText(entrada ? R.string.sentido_entrada : R.string.sentido_salida);
-        pill.setBackgroundResource(entrada ? R.drawable.da_pill_entrada : R.drawable.da_pill_salida);
-        pill.setTextColor(pill.getResources().getColor(entrada ? R.color.da_verde_texto : R.color.da_ambar_texto));
+        com.digiaccess.Modo.pintarSentido(pill, sentido);
     }
 
     private int color(int res) {

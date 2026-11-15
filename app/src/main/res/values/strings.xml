@@ -74,6 +74,9 @@
 	<string name="sentido_salida">SALIDA</string>
 	<string name="carril_peatonal">Peatonal</string>
 	<string name="carril_vehicular">Vehicular</string>
+	<string name="pill_peatonal">PEATONAL</string>
+	<string name="pill_vehicular">VEHICULAR</string>
+	<string name="modo_actual">Ahora: %1$s · %2$s</string>
 	<string name="btn_cedula">CÉDULA</string>
 	<string name="btn_rostro">ROSTRO</string>
 	<string name="title_digiaccess">DIGIACCESS</string>

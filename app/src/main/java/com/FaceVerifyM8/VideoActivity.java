@@ -200,6 +200,13 @@ public class VideoActivity extends AppCompatActivity {
 			finish();
 		});
 
+		// Sentido y carril: el operador los cambia tocando las píldoras. Al cambiar se olvida la última
+		// persona validada para que pueda marcar de nuevo (por ejemplo, salida justo después de la entrada).
+		com.digiaccess.Modo.conectarPildoras(this, R.id.txtSentidoVideo, R.id.txtCarrilVideo, () -> {
+			strUltimaCedula = null;
+			ultimoResultado = null;
+		});
+
 		Log.d(MainActivity.TAG, "VideoActivity created.");
 
 		MainActivity.PlayVoiceWelcome(0);
@@ -212,7 +219,7 @@ public class VideoActivity extends AppCompatActivity {
 
 		bDebugFps = SettingActivity.bDebugStat;
 		Config cfg = Config.load(this);
-		CedulaActivity.pintarSentido(findViewById(R.id.txtSentidoVideo), cfg.sentido);
+		com.digiaccess.Modo.pintar(this, R.id.txtSentidoVideo, R.id.txtCarrilVideo);
 		if(!bDebugFps) txtTitle.setText(cfg.punto);
 		ocultarResultado();
 

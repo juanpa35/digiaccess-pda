@@ -18,12 +18,6 @@
 		<LinearLayout style="@style/DaTopbar">
 			<ImageView style="@style/DaLogo" />
 			<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
-			<TextView
-				android:id="@+id/txtSentidoVideo"
-				style="@style/DaPill"
-				android:background="@drawable/da_pill_entrada"
-				android:text="@string/sentido_entrada"
-				android:textColor="@color/da_verde_texto" />
 			<ImageView
 				android:id="@+id/switch_camera"
 				android:layout_width="40dp"
@@ -42,6 +36,32 @@
 				android:src="@drawable/ic_da_ajustes"
 				android:tint="@color/da_texto_2"
 				android:contentDescription="@string/title_func" />
+		</LinearLayout>
+
+		<!-- Sentido y carril: el operador los cambia tocando -->
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="12dp"
+			android:orientation="horizontal"
+			android:padding="4dp"
+			android:elevation="3dp"
+			android:background="@drawable/da_pill_blanca">
+			<TextView
+				android:id="@+id/txtSentidoVideo"
+				style="@style/DaPill"
+				android:background="@drawable/da_pill_entrada"
+				android:text="@string/sentido_entrada"
+				android:textColor="@color/da_verde_texto" />
+			<TextView
+				android:id="@+id/txtCarrilVideo"
+				style="@style/DaPill"
+				android:layout_marginLeft="6dp"
+				android:layout_marginStart="6dp"
+				android:background="@drawable/da_pill_peatonal"
+				android:text="@string/pill_peatonal"
+				android:textColor="@color/da_azul" />
 		</LinearLayout>
 
 		<!-- Punto (o FPS en modo depuración) -->

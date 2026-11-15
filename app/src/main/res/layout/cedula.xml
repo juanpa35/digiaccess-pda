@@ -14,6 +14,14 @@
 			android:background="@drawable/da_pill_entrada"
 			android:text="@string/sentido_entrada"
 			android:textColor="@color/da_verde_texto" />
+		<TextView
+			android:id="@+id/btnCarril"
+			style="@style/DaPill"
+			android:layout_marginLeft="6dp"
+			android:layout_marginStart="6dp"
+			android:background="@drawable/da_pill_peatonal"
+			android:text="@string/pill_peatonal"
+			android:textColor="@color/da_azul" />
 	</LinearLayout>
 
 	<TextView

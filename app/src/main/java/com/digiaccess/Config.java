@@ -83,6 +83,18 @@ public final class Config {
                 .putString("sentido", SALIDA.equals(sentido) ? SALIDA : ENTRADA).apply();
     }
 
+    /** Cambia solo el carril (botón PEATONAL/VEHICULAR de las pantallas de operación). */
+    public static void setCarril(Context ctx, String carril) {
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .putString("carril", VEHICULAR.equals(carril) ? VEHICULAR : PEATONAL).apply();
+    }
+
+    public static String alternarCarril(Context ctx) {
+        String nuevo = PEATONAL.equals(load(ctx).carril) ? VEHICULAR : PEATONAL;
+        setCarril(ctx, nuevo);
+        return nuevo;
+    }
+
     public static String alternarSentido(Context ctx) {
         String nuevo = ENTRADA.equals(load(ctx).sentido) ? SALIDA : ENTRADA;
         setSentido(ctx, nuevo);

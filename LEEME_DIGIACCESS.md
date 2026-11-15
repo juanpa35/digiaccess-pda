@@ -89,7 +89,11 @@ Luego pulse **Probar conexión** y después **Sincronizar ahora**.
 
 ## 7. Uso diario
 
-- **Pantalla principal:** botón **ENTRADA/SALIDA** y botón **CÉDULA**. Cuando el PDA ve un rostro abre la verificación facial.
+- **Sentido y carril sin clave:** el operador los cambia sin entrar a administración.
+  - En la pantalla principal, con los selectores **Entrada/Salida** y **Peatonal/Vehicular**.
+  - En las pantallas de cédula y de rostro, tocando las píldoras de arriba.
+  - Cada cambio muestra un aviso corto con el modo nuevo, por ejemplo "Ahora: SALIDA · VEHICULAR".
+- **Pantalla principal:** el botón **Validar con cédula**. Cuando el PDA ve un rostro, abre la verificación facial.
 - **La cédula se puede leer en cualquier pantalla** (principal, rostro o cédula): el PDA pasa solo a la validación con cédula.
 - **Cédula digital:** su QR está cifrado por la Registraduría, así que se usa **Digitar cédula**.
 - **Colores:** verde = autorizado; rojo = denegado (sin autorización vigente, fuera de días, sin permiso vehicular o restringido); naranja = antipassback o no se pudo validar.
