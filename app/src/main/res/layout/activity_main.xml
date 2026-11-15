@@ -119,12 +119,12 @@
 			android:orientation="horizontal">
 			<LinearLayout android:id="@+id/btnRostroMain" style="@style/DaBotonSecundario" android:layout_width="0dp" android:layout_weight="1">
 				<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_rostro" />
-				<TextView style="@style/DaBotonTexto" android:text="@string/btn_rostro" />
+				<TextView style="@style/DaBotonTexto" android:text="@string/main_rostro" />
 			</LinearLayout>
 			<View android:layout_width="10dp" android:layout_height="1dp" />
 			<LinearLayout android:id="@+id/btnCedulaMain" style="@style/DaBotonPrimario" android:layout_width="0dp" android:layout_weight="1">
 				<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_cedula" />
-				<TextView style="@style/DaBotonTexto" android:text="@string/btn_cedula" />
+				<TextView style="@style/DaBotonTexto" android:text="@string/main_cedula" />
 			</LinearLayout>
 		</LinearLayout>
 
