@@ -1,0 +1,5 @@
+# Nadie puede abrir config.php desde el navegador
+<Files "config.php">
+	Require all denied
+</Files>
+DirectoryIndex index.php
