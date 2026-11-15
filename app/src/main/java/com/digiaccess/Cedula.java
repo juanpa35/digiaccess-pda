@@ -76,7 +76,20 @@ public final class Cedula {
         String data = null;
         if (raw != null && raw.length > 0) data = new String(raw, LATIN1);
         else if (text != null) data = text;
-        if (data == null || data.length() < 20) return null;
+        if (data == null) return null;
+
+        // Escáner con formato de datos configurado (como los lectores DIGIACCESS existentes):
+        // salta 48 caracteres, envía los 10 del número de documento y Enter -> llega solo "0080123456".
+        String limpio = data.trim();
+        if (limpio.length() >= 3 && limpio.length() <= 12 && soloDigitos(limpio).length() == limpio.length()) {
+            String n = quitarCerosIzquierda(limpio);
+            if (!NUMERO_VALIDO.matcher(n).matches()) return null;
+            Cedula c = new Cedula();
+            c.numero = n;
+            c.origen = ORIGEN_PDF417;
+            return c;
+        }
+        if (data.length() < 20) return null;
 
         Cedula c = parseOffsets(data);
         if (c == null) c = parseHeuristic(data);

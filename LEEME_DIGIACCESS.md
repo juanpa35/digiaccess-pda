@@ -60,7 +60,10 @@ En la app de configuración del escáner del PDA (suele llamarse *Scanner*, *Sca
 
 1. Modo de salida: **Broadcast / Intent / API** (no "teclado"). En modo teclado se pierden los separadores del código de la cédula y los nombres quedan pegados, aunque el número sí se lee bien.
 2. Active la simbología **PDF417**, y también **QR** para detectar la cédula digital y pedir que se digite.
-3. Las acciones de las marcas más comunes ya vienen incluidas (Urovo, iData, Newland, Sunmi, Seuic, Honeywell, Zebra, Chainway). Si el escáner no responde, copie la *acción* y el *nombre del dato* (extra) que muestra la configuración del escáner y escríbalos en DIGIACCESS › "Lector 2D".
+3. La app acepta los dos formatos de lectura de la cédula amarilla:
+   - **Código completo:** la app toma el número de las posiciones 48 a 58 y le quita los ceros a la izquierda.
+   - **Formato de datos en el escáner:** el mismo de los lectores DIGIACCESS actuales (saltar 48 caracteres, enviar 10 y Enter). Al PDA llega solo `0080123456` y la app lo toma como la cédula 80123456. En este modo no se leen los nombres; DIGIACCESS responde el nombre de la persona.
+4. Las acciones de las marcas más comunes ya vienen incluidas (Urovo, iData, Newland, Sunmi, Seuic, Honeywell, Zebra, Chainway). Si el escáner no responde, copie la *acción* y el *nombre del dato* (extra) que muestra la configuración del escáner y escríbalos en DIGIACCESS › "Lector 2D".
 
 ## 5. Configurar la app
 
