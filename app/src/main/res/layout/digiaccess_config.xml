@@ -111,6 +111,75 @@
 				android:hint="@string/opcional"
 				android:inputType="text" />
 
+			<CheckBox
+				android:id="@+id/cbAutoRostro"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_auto_rostro" />
+			<TextView style="@style/DaAyuda" android:text="@string/cfg_auto_rostro_ayuda" />
+
+			<!-- Nube yunatt: de ahí se descargan los rostros -->
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="26dp"
+				android:text="@string/cfg_yunatt_titulo"
+				android:textColor="@color/da_texto"
+				android:textSize="19sp"
+				android:fontFamily="@font/inter_bold" />
+			<TextView style="@style/DaAyuda" android:text="@string/cfg_yunatt_ayuda" />
+
+			<CheckBox
+				android:id="@+id/cbYunattActivo"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_yunatt_activo" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_yunatt_servidor" />
+			<EditText
+				android:id="@+id/etYunattServidor"
+				style="@style/DaCampo"
+				android:inputType="textUri" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_yunatt_puerto" />
+			<EditText
+				android:id="@+id/etYunattPuerto"
+				style="@style/DaCampo"
+				android:inputType="number" />
+
+			<TextView style="@style/DaEtiqueta" android:text="@string/cfg_yunatt_sn" />
+			<EditText
+				android:id="@+id/etYunattSn"
+				style="@style/DaCampo"
+				android:inputType="textCapCharacters" />
+
+			<CheckBox
+				android:id="@+id/cbYunattMarcas"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_yunatt_marcas" />
+
+			<TextView
+				android:id="@+id/txtEstadoYunatt"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_info"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp" />
+
+			<Button android:id="@+id/btnYunattConectar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_yunatt_conectar" />
+
 			<TextView
 				android:id="@+id/txtEstadoSync"
 				android:layout_width="match_parent"

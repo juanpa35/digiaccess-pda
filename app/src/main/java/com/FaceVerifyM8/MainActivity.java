@@ -95,6 +95,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	private volatile Camera camera = null; // Camera object
 	private volatile SurfaceTexture surfaceTexture = new SurfaceTexture(8);// Camera surface object
 	private boolean bPause = false;
+	/** Detección automática con la cámara encendida en la pantalla principal (Configuración DIGIACCESS). */
+	private volatile boolean bAutoRostro = false;
+	private static boolean bYunattIniciado = false;
 
 	private static MediaPlayer mpWelcomeShort = null, mpWelcomeLong = null;
 	public static final String REG_URL="https://global.yunatt.com/handheldface/api/v1/applyAlgorithmLicense";
@@ -472,8 +475,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 		ReadSetting();
 
-		mpWelcomeShort = MediaPlayer.create(this, R.raw.welcome_short);
-		mpWelcomeLong = MediaPlayer.create(this, R.raw.welcome_long);
+		com.digiaccess.Voz.iniciar(this);
 
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -492,7 +494,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 					txtDate.setText(fmt.format(date));
 				});
 
-				if(!bPause) {
+				if(!bPause && bAutoRostro) {
 					// Detect face
 					if(VideoActivity.bFrameReady) {
 						VideoActivity.bFrameReady = false;
@@ -526,6 +528,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		// Sentido y carril: el operador los cambia sin clave de administrador
 		com.digiaccess.Modo.conectarSegmentos(this, R.id.segEntrada, R.id.segSalida, R.id.segPeatonal, R.id.segVehicular, this::mostrarSentido);
 		findViewById(R.id.btnCedulaMain).setOnClickListener(v -> abrirCedula(null, null));
+		// Rostro bajo demanda: la cámara solo se abre al tocar (deja libre el lector 2D)
+		View.OnClickListener rostro = v -> {
+			if(bSdkInit) startVerify();
+			else {
+				StartSdk();
+				android.widget.Toast.makeText(this, bSdkInit ? getString(R.string.mire_pantalla) : getString(R.string.rostro_no_listo), android.widget.Toast.LENGTH_SHORT).show();
+				if(bSdkInit) startVerify();
+			}
+		};
+		findViewById(R.id.btnRostroMain).setOnClickListener(rostro);
+		findViewById(R.id.anilloRostro).setOnClickListener(rostro);
 
 		// Lector 2D: una lectura en la pantalla principal abre la validación con cédula
 		scanner = new ScannerHelper(this, this::abrirCedula);
@@ -595,13 +608,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		if(scanner != null) scanner.start();
 
 		bPause = false;
+		bAutoRostro = com.digiaccess.Config.load(this).autoRostro;
+		((TextView) findViewById(R.id.txtAcerquese)).setText(bAutoRostro ? R.string.acerquese : R.string.toque_rostro);
 
 		// Wait a moment to start sdk and camera for GUI appear quickly
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				StartSdk();
-				openCamera();
+				if(bAutoRostro) openCamera();
+				else if(camera != null) { closeCamera(camera); camera = null; }
+				if(!bYunattIniciado) {
+					bYunattIniciado = true;
+					com.digiaccess.YunattCliente.reiniciar(MainActivity.this);
+				}
 			}
 		}, 100);
 	}
@@ -1032,11 +1052,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		} catch(Exception ignored) { }
 	}
 
+	/** Mensaje de voz en español (los audios originales del fabricante no se usan). */
 	public static void PlayVoiceWelcome(int nType)
 	{
-		MediaPlayer mp = null;
-		if(nType == 0) mp = mpWelcomeLong;
-		else mp = mpWelcomeShort;
-		if(mp != null) mp.start();
+		com.digiaccess.Voz.decir(nType == 0 ? "Mire a la cámara" : "Bienvenido");
 	}
 }

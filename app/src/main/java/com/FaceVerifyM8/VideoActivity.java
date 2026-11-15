@@ -32,6 +32,7 @@ import com.digiaccess.Config;
 import com.digiaccess.FaceStore;
 import com.digiaccess.ScannerHelper;
 import com.digiaccess.Sonidos;
+import com.digiaccess.YunattCliente;
 
 public class VideoActivity extends AppCompatActivity {
 	static final int MAGIC_TEXTURE_ID = 10;
@@ -99,6 +100,7 @@ public class VideoActivity extends AppCompatActivity {
 	// DIGIACCESS: resultado de la validación en el servidor
 	private volatile int nResCodigo = 0;              // 1 permitido, 2 denegado, 4 antipassback, 0 sin validar, -1 rostro no reconocido
 	private volatile String strResLinea1 = "", strResLinea2 = "";
+	private long tVozNoReconocido = 0;
 	private String strUltimaCedula = null;            // evita marcar dos veces a la misma persona que sigue frente a la cámara
 	private long tUltimaCedula = 0;
 	private Acceso.Resultado ultimoResultado = null;
@@ -207,6 +209,12 @@ public class VideoActivity extends AppCompatActivity {
 			ultimoResultado = null;
 		});
 
+		// Pasar a cédula: se cierra la cámara (onPause) para que el lector 2D quede libre
+		findViewById(R.id.btnUsarCedula).setOnClickListener(v -> {
+			startActivity(new Intent(this, CedulaActivity.class));
+			finish();
+		});
+
 		Log.d(MainActivity.TAG, "VideoActivity created.");
 
 		MainActivity.PlayVoiceWelcome(0);
@@ -262,11 +270,16 @@ public class VideoActivity extends AppCompatActivity {
 		bFace = bLive = bPass = bFail = false;
 		nScore = 0;
 
+		// Liberar la cámara: si queda abierta, el lector 2D (o la cámara trasera) reporta "cámara en uso"
+		bCameraReady = false;
+		closeCamera();
+
 		Log.d(MainActivity.TAG, "VideoActivity paused.");
 	}
 
 	@Override
 	protected void onDestroy() {
+		closeCamera();
 		if(surfaceHolder != null) surfaceHolder.removeCallback(surfaceCallback);
 
 		if (surfaceHolder != null) {
@@ -618,7 +631,9 @@ public class VideoActivity extends AppCompatActivity {
 							strUltimaCedula = userPass.workno;
 							tUltimaCedula = System.currentTimeMillis();
 							ultimoResultado = r;
-							Sonidos.resultado(r.codigo);
+							boolean esSalida = Config.SALIDA.equals(Config.load(this).sentido);
+							Sonidos.resultado(r.codigo, Sonidos.frase(r, esSalida));
+							if(r.permitido() && !r.sinConexion) YunattCliente.enviarMarca(this, userPass.workno, userPass.uname, esSalida);
 						}
 						nResCodigo = r.codigo;
 						String nombre = r.nombre != null && r.nombre.length() > 0 ? r.nombre : userPass.uname;
@@ -650,6 +665,10 @@ public class VideoActivity extends AppCompatActivity {
 							bFail = true;
 							tLost = tCur;
 							runOnUiThread(() -> mostrarResultado(-1, "Acceso denegado", "Rostro no reconocido", "Use la cédula o contacte al administrador"));
+							if(tCur - tVozNoReconocido > 6000) {
+								tVozNoReconocido = tCur;
+								Sonidos.resultado(-1, "Rostro no reconocido. Use la cédula");
+							}
 						}
 					} else if(ret != 0) { // Face detected
 						tFace = tLost = tCur; // start

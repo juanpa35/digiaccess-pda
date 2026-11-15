@@ -148,6 +148,18 @@
 			</LinearLayout>
 		</LinearLayout>
 
+		<!-- Cambiar a cédula: cierra la cámara para liberar el lector 2D -->
+		<LinearLayout
+			android:id="@+id/btnUsarCedula"
+			style="@style/DaBotonPrimario"
+			android:layout_width="match_parent"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="16dp"
+			android:layout_marginBottom="16dp">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_cedula" />
+			<TextView style="@style/DaBotonTexto" android:text="@string/usar_cedula" />
+		</LinearLayout>
+
 		<!-- Fecha y hora (ocultas en este diseño; el código las sigue actualizando) -->
 		<LinearLayout
 			android:layout_width="wrap_content"

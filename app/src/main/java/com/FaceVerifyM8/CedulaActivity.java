@@ -154,7 +154,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         if (c == null) {
             // QR de la cédula digital (cifrado) u otro código
             mostrarAviso(getString(R.string.res_no_reconocido), getString(R.string.cedula_no_reconocida_ayuda));
-            Sonidos.resultado(2);
+            Sonidos.resultado(2, "Cédula no reconocida. Digite el número");
             pedirNumero(null);
             return;
         }
@@ -182,7 +182,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
                     Cedula c = Cedula.digitada(et.getText().toString());
                     if (c == null) {
                         mostrarAviso(getString(R.string.res_numero_invalido), getString(R.string.cedula_numero_invalido));
-                        Sonidos.resultado(2);
+                        Sonidos.resultado(2, "Número inválido");
                     } else {
                         validar(c, Acceso.MEDIO_DIGITADA);
                     }
@@ -209,7 +209,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
             ui.post(() -> {
                 validando = false;
                 mostrarResultado(r, c.numero, a);
-                Sonidos.resultado(r.codigo);
+                Sonidos.resultado(r.codigo, Sonidos.frase(r, Config.SALIDA.equals(Config.load(this).sentido)));
                 ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
             });
         });

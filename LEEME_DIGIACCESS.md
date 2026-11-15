@@ -56,14 +56,20 @@ adb pull /sdcard/FaceSdk  respaldo_FaceSdk  # respaldo de la licencia
 
 ## 4. Lector 2D del PDA
 
-En la app de configuración del escáner del PDA (suele llamarse *Scanner*, *ScanSettings* o *Barcode*):
+La app funciona con el escáner en **cualquiera de los dos modos de salida**; no es obligatorio usar broadcast.
 
-1. Modo de salida: **Broadcast / Intent / API** (no "teclado"). En modo teclado se pierden los separadores del código de la cédula y los nombres quedan pegados, aunque el número sí se lee bien.
-2. Active la simbología **PDF417**, y también **QR** para detectar la cédula digital y pedir que se digite.
-3. La app acepta los dos formatos de lectura de la cédula amarilla:
-   - **Código completo:** la app toma el número de las posiciones 48 a 58 y le quita los ceros a la izquierda.
-   - **Formato de datos en el escáner:** el mismo de los lectores DIGIACCESS actuales (saltar 48 caracteres, enviar 10 y Enter). Al PDA llega solo `0080123456` y la app lo toma como la cédula 80123456. En este modo no se leen los nombres; DIGIACCESS responde el nombre de la persona.
-4. Las acciones de las marcas más comunes ya vienen incluidas (Urovo, iData, Newland, Sunmi, Seuic, Honeywell, Zebra, Chainway). Si el escáner no responde, copie la *acción* y el *nombre del dato* (extra) que muestra la configuración del escáner y escríbalos en DIGIACCESS › "Lector 2D".
+**Modo teclado (el más fácil):** el escáner "escribe" la lectura y termina con Enter.
+1. En la app del escáner (suele llamarse *Scanner*, *ScanSettings*, *Barcode* o *Escáner*), deje la salida en **Teclado / Keyboard / Simular teclado** con **sufijo Enter**.
+2. Programe el mismo formato de los lectores DIGIACCESS: saltar 48 caracteres, enviar 10 y Enter. Al PDA llega `0080123456` y la app lo toma como la cédula 80123456.
+3. No hay que escribir nada en la configuración de DIGIACCESS.
+
+**Modo broadcast (opcional):** el escáner le pasa la lectura a la app "por debajo", sin escribirla.
+1. En la app del escáner busque **Modo de salida / Output mode** y elija **Broadcast**, **Intent** o **API**.
+2. Esa misma pantalla muestra dos datos: la **acción** (por ejemplo `android.intent.ACTION_DECODE_DATA`) y el **nombre del dato** o *extra* (por ejemplo `barcode_string`).
+3. Si la acción es de las que ya trae la app (Urovo, iData, Newland, Sunmi, Seuic, Honeywell, Zebra, Chainway), no hay que hacer nada más. Si no, copie esos dos datos en DIGIACCESS › "Lector 2D: acción broadcast adicional" y "nombre del dato (extra)" y guarde.
+4. Si la pantalla permite escribir la acción, puede poner `com.digiaccess.SCAN` con el extra `barcode_string`.
+
+En los dos modos, active la simbología **PDF417** (cédula amarilla) y **QR** (para avisar que la cédula digital se debe digitar).
 
 ## 5. Configurar la app
 
@@ -81,7 +87,16 @@ Luego pulse **Probar conexión** y después **Sincronizar ahora**.
 
 > El tablero de ingresos clasifica como **peatonal** todo punto cuyo nombre contenga "molinete". Si el PDA es peatonal, incluya esa palabra en el nombre del punto.
 
-## 6. Enrolar rostros (en el PDA)
+## 6. Rostros: desde la nube yunatt o en el PDA
+
+**Desde la nube yunatt (recomendado):** el PDA se conecta a `global.yunatt.com` como una terminal más y recibe los rostros que DIGIACCESS ya maneja en yunatt (altas con foto, cambios de nombre, bajas y borrado total).
+1. En la nube yunatt, agregue el PDA como dispositivo con un número de serie (SN), por ejemplo `DIGIPDA001`.
+2. En el PDA: Funciones › DIGIACCESS › **Nube yunatt (rostros)**. Active "Conectar a la nube yunatt", deje servidor `global.yunatt.com` y puerto `7792`, escriba el mismo SN y pulse **Guardar y conectar a yunatt**. El recuadro debe decir "Conectado a yunatt".
+3. Desde yunatt, envíe los usuarios al PDA. El contador "recibidos" sube con cada rostro.
+4. **Importante:** el ID (enrollid) del usuario en yunatt debe ser el número de cédula, porque con ese número el PDA valida en DIGIACCESS.
+5. El ingreso **siempre** se registra en DIGIACCESS (validar_acceso.php). Enviar también la marca a yunatt es opcional y viene apagado.
+
+**En el PDA:**
 
 - **Uno a uno:** Funciones › Rostros › Nuevo. Escriba la **cédula** (el nombre se llena solo si la persona está en la lista de autorizados) y tome la foto de frente, sin tapabocas.
 - **Masivo:** copie fotos al PDA en la carpeta `/LoadUsers` con el nombre `CEDULA_NOMBRE.jpg` (por ejemplo `80123456_JUAN PEREZ.jpg`) y pulse **Cargar** en Funciones. Las que fallan quedan en `/Bad` con el motivo en el nombre.
@@ -93,7 +108,8 @@ Luego pulse **Probar conexión** y después **Sincronizar ahora**.
   - En la pantalla principal, con los selectores **Entrada/Salida** y **Peatonal/Vehicular**.
   - En las pantallas de cédula y de rostro, tocando las píldoras de arriba.
   - Cada cambio muestra un aviso corto con el modo nuevo, por ejemplo "Ahora: SALIDA · VEHICULAR".
-- **Pantalla principal:** el botón **Validar con cédula**. Cuando el PDA ve un rostro, abre la verificación facial.
+- **Pantalla principal:** botones **Rostro** y **Cédula**. La cámara solo se enciende al tocar **Rostro** (o el círculo), y se apaga al salir de esa pantalla; así el lector 2D queda libre. En la pantalla de rostro, **Usar cédula** cierra la cámara y pasa a la cédula. (Si prefiere que el PDA detecte el rostro solo, active "Detección automática de rostro" en DIGIACCESS; mantiene la cámara encendida.)
+- **Voz en español:** el PDA dice "Bienvenido, Juan", "Hasta luego, Juan", el motivo del rechazo o "Rostro no reconocido". Usa la voz de Android; si no suena, instale "Servicios de voz de Google" y descargue el idioma Español en Ajustes › Idioma › Salida de texto a voz.
 - **La cédula se puede leer en cualquier pantalla** (principal, rostro o cédula): el PDA pasa solo a la validación con cédula.
 - **Cédula digital:** su QR está cifrado por la Registraduría, así que se usa **Digitar cédula**.
 - **Colores:** verde = autorizado; rojo = denegado (sin autorización vigente, fuera de días, sin permiso vehicular o restringido); naranja = antipassback o no se pudo validar.

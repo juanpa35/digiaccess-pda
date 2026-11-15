@@ -15,14 +15,28 @@ import com.digiaccess.Config;
 import com.digiaccess.FaceStore;
 import com.digiaccess.LocalStore;
 import com.digiaccess.SyncManager;
+import com.digiaccess.YunattCliente;
 
 /** Configuración de la conexión con DIGIACCESS (Funciones > DIGIACCESS). Protegida por la clave de administrador. */
 public class DigiAccessActivity extends AppCompatActivity {
 
     private EditText etValidarUrl, etSyncUrl, etToken, etPunto, etSyncMin, etScannerAccion, etScannerExtra;
     private RadioButton rbEntrada, rbSalida, rbPeatonal, rbVehicular;
-    private CheckBox cbSinConexion, cbEliminarRostros;
-    private TextView txtEstado;
+    private CheckBox cbSinConexion, cbEliminarRostros, cbAutoRostro, cbYunattActivo, cbYunattMarcas;
+    private EditText etYunattServidor, etYunattPuerto, etYunattSn;
+    private TextView txtEstado, txtEstadoYunatt;
+    private final android.os.Handler ui = new android.os.Handler();
+    private final Runnable refrescarYunatt = new Runnable() {
+        @Override
+        public void run() {
+            txtEstadoYunatt.setText(YunattCliente.estado
+                    + "\nRostros en el PDA: " + MainActivity.nUserNum
+                    + " · recibidos: " + YunattCliente.rostrosRecibidos
+                    + " · eliminados: " + YunattCliente.rostrosEliminados
+                    + (YunattCliente.ultimoError.isEmpty() || YunattCliente.conectado() ? "" : "\nÚltimo error: " + YunattCliente.ultimoError));
+            ui.postDelayed(this, 2000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +58,13 @@ public class DigiAccessActivity extends AppCompatActivity {
         cbSinConexion = findViewById(R.id.cbSinConexion);
         cbEliminarRostros = findViewById(R.id.cbEliminarRostros);
         txtEstado = findViewById(R.id.txtEstadoSync);
+        cbAutoRostro = findViewById(R.id.cbAutoRostro);
+        cbYunattActivo = findViewById(R.id.cbYunattActivo);
+        cbYunattMarcas = findViewById(R.id.cbYunattMarcas);
+        etYunattServidor = findViewById(R.id.etYunattServidor);
+        etYunattPuerto = findViewById(R.id.etYunattPuerto);
+        etYunattSn = findViewById(R.id.etYunattSn);
+        txtEstadoYunatt = findViewById(R.id.txtEstadoYunatt);
 
         Config c = Config.load(this);
         etValidarUrl.setText(c.validarUrl);
@@ -57,11 +78,28 @@ public class DigiAccessActivity extends AppCompatActivity {
         (Config.VEHICULAR.equals(c.carril) ? rbVehicular : rbPeatonal).setChecked(true);
         cbSinConexion.setChecked(c.permitirSinConexion);
         cbEliminarRostros.setChecked(c.eliminarRostrosNoAutorizados);
+        cbAutoRostro.setChecked(c.autoRostro);
+        cbYunattActivo.setChecked(c.yunattActivo);
+        cbYunattMarcas.setChecked(c.yunattMarcas);
+        etYunattServidor.setText(c.yunattServidor);
+        etYunattPuerto.setText(String.valueOf(c.yunattPuerto));
+        etYunattSn.setText(c.yunattSn);
         mostrarEstadoLocal();
+
+        findViewById(R.id.btnYunattConectar).setOnClickListener(v -> {
+            guardar();
+            Config cy = Config.load(this);
+            if (cy.yunattActivo && cy.yunattSn.isEmpty()) {
+                Toast.makeText(this, R.string.cfg_yunatt_sn, Toast.LENGTH_LONG).show();
+                etYunattSn.requestFocus();
+            }
+            YunattCliente.reiniciar(this);
+        });
 
         Button btnGuardar = findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(v -> {
             guardar();
+            YunattCliente.reiniciar(this);
             Toast.makeText(this, R.string.cfg_guardado, Toast.LENGTH_SHORT).show();
         });
 
@@ -113,12 +151,35 @@ public class DigiAccessActivity extends AppCompatActivity {
         c.eliminarRostrosNoAutorizados = cbEliminarRostros.isChecked();
         c.scannerAction = etScannerAccion.getText().toString();
         c.scannerExtra = etScannerExtra.getText().toString();
+        c.autoRostro = cbAutoRostro.isChecked();
+        c.yunattActivo = cbYunattActivo.isChecked();
+        c.yunattMarcas = cbYunattMarcas.isChecked();
+        c.yunattServidor = etYunattServidor.getText().toString().trim()
+                .replaceFirst("^(?i)(ws|wss|http|https)://", "").replaceFirst("[:/].*$", "");
+        c.yunattSn = etYunattSn.getText().toString().trim();
+        try {
+            c.yunattPuerto = Integer.parseInt(etYunattPuerto.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            c.yunattPuerto = 7792;
+        }
         try {
             c.syncMinutes = Integer.parseInt(etSyncMin.getText().toString().trim());
         } catch (NumberFormatException e) {
             c.syncMinutes = 10;
         }
         c.save(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ui.post(refrescarYunatt);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ui.removeCallbacks(refrescarYunatt);
     }
 
     private void mostrarEstadoLocal() {

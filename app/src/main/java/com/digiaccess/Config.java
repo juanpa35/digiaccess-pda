@@ -42,6 +42,21 @@ public final class Config {
     /** Al sincronizar, borrar del PDA los rostros que ya no tienen autorización vigente. */
     public boolean eliminarRostrosNoAutorizados = false;
 
+    // --- Nube yunatt: de ahí llegan los rostros (usuarios con foto, altas y bajas)
+    public boolean yunattActivo = false;
+    public String yunattServidor = "global.yunatt.com";
+    public int yunattPuerto = 7792;
+    /** Número de serie con el que el PDA está registrado en la nube yunatt. */
+    public String yunattSn = "";
+    /** Enviar también a yunatt las marcas de rostro (además de DIGIACCESS). */
+    public boolean yunattMarcas = false;
+
+    /**
+     * Detección automática de rostros en la pantalla principal. Mantiene la cámara encendida,
+     * y en PDA con lector 2D por cámara impide leer cédulas. Por eso viene apagada.
+     */
+    public boolean autoRostro = false;
+
     private Config() { }
 
     public static Config load(Context ctx) {
@@ -58,6 +73,12 @@ public final class Config {
         c.syncMinutes = p.getInt("syncMinutes", 10);
         c.permitirSinConexion = p.getBoolean("permitirSinConexion", true);
         c.eliminarRostrosNoAutorizados = p.getBoolean("eliminarRostros", false);
+        c.yunattActivo = p.getBoolean("yunattActivo", false);
+        c.yunattServidor = p.getString("yunattServidor", "global.yunatt.com");
+        c.yunattPuerto = p.getInt("yunattPuerto", 7792);
+        c.yunattSn = p.getString("yunattSn", "");
+        c.yunattMarcas = p.getBoolean("yunattMarcas", false);
+        c.autoRostro = p.getBoolean("autoRostro", false);
         return c;
     }
 
@@ -74,6 +95,12 @@ public final class Config {
                 .putInt("syncMinutes", Math.max(1, syncMinutes))
                 .putBoolean("permitirSinConexion", permitirSinConexion)
                 .putBoolean("eliminarRostros", eliminarRostrosNoAutorizados)
+                .putBoolean("yunattActivo", yunattActivo)
+                .putString("yunattServidor", t(yunattServidor).isEmpty() ? "global.yunatt.com" : t(yunattServidor))
+                .putInt("yunattPuerto", yunattPuerto > 0 ? yunattPuerto : 7792)
+                .putString("yunattSn", t(yunattSn))
+                .putBoolean("yunattMarcas", yunattMarcas)
+                .putBoolean("autoRostro", autoRostro)
                 .apply();
     }
 
@@ -103,6 +130,10 @@ public final class Config {
 
     public boolean validarConfigurado() {
         return t(validarUrl).startsWith("http");
+    }
+
+    public boolean yunattConfigurado() {
+        return yunattActivo && t(yunattSn).length() > 0 && t(yunattServidor).length() > 0;
     }
 
     public boolean syncConfigurado() {
