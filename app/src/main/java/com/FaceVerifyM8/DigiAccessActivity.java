@@ -65,6 +65,11 @@ public class DigiAccessActivity extends AppCompatActivity {
         etYunattPuerto = findViewById(R.id.etYunattPuerto);
         etYunattSn = findViewById(R.id.etYunattSn);
         txtEstadoYunatt = findViewById(R.id.txtEstadoYunatt);
+        if (BuildConfig.SOLO_CEDULA) {
+            findViewById(R.id.seccionRostro).setVisibility(android.view.View.GONE);
+            cbEliminarRostros.setVisibility(android.view.View.GONE);
+            findViewById(R.id.btnDepurar).setVisibility(android.view.View.GONE);
+        }
 
         Config c = Config.load(this);
         etValidarUrl.setText(c.validarUrl);
@@ -99,7 +104,7 @@ public class DigiAccessActivity extends AppCompatActivity {
         Button btnGuardar = findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(v -> {
             guardar();
-            YunattCliente.reiniciar(this);
+            if (!BuildConfig.SOLO_CEDULA) YunattCliente.reiniciar(this);
             Toast.makeText(this, R.string.cfg_guardado, Toast.LENGTH_SHORT).show();
         });
 

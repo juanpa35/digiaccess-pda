@@ -19,6 +19,11 @@ public class FunctionsActivity extends AppCompatActivity {
 		imgSetting = findViewById(R.id.imgSetting);
 		imgLoadUsers = findViewById(R.id.imgLoadUsers);
 		imgExport = findViewById(R.id.imgExport);
+		if(BuildConfig.SOLO_CEDULA) {
+			// Sin reconocimiento facial: no hay rostros que administrar ni cargar
+			imgUsers.setVisibility(android.view.View.INVISIBLE);
+			imgLoadUsers.setVisibility(android.view.View.INVISIBLE);
+		}
 
 		imgUsers.setOnClickListener(arg0-> {
 			Intent intent = new Intent(this, UsersActivity.class);

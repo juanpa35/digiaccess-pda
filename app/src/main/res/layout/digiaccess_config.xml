@@ -111,6 +111,12 @@
 				android:hint="@string/opcional"
 				android:inputType="text" />
 
+			<LinearLayout
+				android:id="@+id/seccionRostro"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
 			<CheckBox
 				android:id="@+id/cbAutoRostro"
 				android:layout_width="wrap_content"
@@ -179,6 +185,7 @@
 				android:textSize="14sp" />
 
 			<Button android:id="@+id/btnYunattConectar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_yunatt_conectar" />
+			</LinearLayout>
 
 			<TextView
 				android:id="@+id/txtEstadoSync"

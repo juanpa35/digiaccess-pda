@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: DIGIACCESS-PDA-apk
-          path: app/build/outputs/apk/release/*.apk
+          path: app/build/outputs/apk/*/release/*.apk
 
       - name: Publicar versión descargable
         uses: softprops/action-gh-release@v2
@@ -39,4 +39,4 @@ jobs:
           tag_name: v1.0.${{ github.run_number }}
           name: DIGIACCESS PDA 1.0.${{ github.run_number }}
           body: "APK firmado con keystore/key.jks. Compilado desde ${{ github.sha }}."
-          files: app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/*/release/*.apk

@@ -9,6 +9,14 @@
 	<LinearLayout style="@style/DaTopbar">
 		<ImageView style="@style/DaLogo" />
 		<View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+		<ImageView
+			android:id="@+id/btnAjustesMain"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:padding="8dp"
+			android:src="@drawable/ic_da_ajustes"
+			android:tint="@color/da_texto_2"
+			android:contentDescription="@string/title_func" />
 	</LinearLayout>
 
 	<!-- Centro: tocar abre la verificación facial -->
@@ -69,6 +77,7 @@
 			android:focusable="true"
 			android:background="@drawable/da_anillo_rostro">
 			<ImageView
+				android:id="@+id/icoAnillo"
 				android:layout_width="64dp"
 				android:layout_height="64dp"
 				android:layout_gravity="center"

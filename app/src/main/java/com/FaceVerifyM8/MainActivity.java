@@ -443,7 +443,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		// initialize directions
 		strLicPath = null;
 		// ANDROID 11 or later, Need permission to access the storage
-		if(Build.VERSION.SDK_INT >= 30) {
+		if(!BuildConfig.SOLO_CEDULA && Build.VERSION.SDK_INT >= 30) {
 			if(!Environment.isExternalStorageManager()) { // No permission to access the storage
 				// ignored if the license file already exist in the APP files path, otherwise, start activity to request permission to access the storage
 				String strFilesDir = getFilesDir().getAbsolutePath();
@@ -539,6 +539,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		};
 		findViewById(R.id.btnRostroMain).setOnClickListener(rostro);
 		findViewById(R.id.anilloRostro).setOnClickListener(rostro);
+		// Administración (clave) sin pasar por la cámara
+		findViewById(R.id.btnAjustesMain).setOnClickListener(v -> startActivity(new Intent(this, PasswordActivity.class)));
+		if(BuildConfig.SOLO_CEDULA) {
+			// Versión solo cédula: sin botón de rostro; el círculo abre la cédula
+			findViewById(R.id.btnRostroMain).setVisibility(View.GONE);
+			((android.widget.ImageView) findViewById(R.id.icoAnillo)).setImageResource(R.drawable.ic_da_cedula);
+			findViewById(R.id.anilloRostro).setOnClickListener(v -> abrirCedula(null, null));
+		}
 
 		// Lector 2D: una lectura en la pantalla principal abre la validación con cédula
 		scanner = new ScannerHelper(this, this::abrirCedula);
@@ -580,7 +588,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void actualizarEstado() {
 		String str;
-		if(bSdkInit) {
+		if(BuildConfig.SOLO_CEDULA) str = "Modo cédula";
+		else if(bSdkInit) {
 			if(nUserNum == 0) str = "Sin rostros enrolados: use la cédula";
 			else str = nUserNum + (nUserNum > 1 ? " rostros" : " rostro");
 		} else str = "Iniciando reconocimiento facial…";
@@ -608,13 +617,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		if(scanner != null) scanner.start();
 
 		bPause = false;
-		bAutoRostro = com.digiaccess.Config.load(this).autoRostro;
-		((TextView) findViewById(R.id.txtAcerquese)).setText(bAutoRostro ? R.string.acerquese : R.string.toque_rostro);
+		bAutoRostro = !BuildConfig.SOLO_CEDULA && com.digiaccess.Config.load(this).autoRostro;
+		((TextView) findViewById(R.id.txtAcerquese)).setText(BuildConfig.SOLO_CEDULA ? R.string.lea_cedula : bAutoRostro ? R.string.acerquese : R.string.toque_rostro);
 
 		// Wait a moment to start sdk and camera for GUI appear quickly
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				if(BuildConfig.SOLO_CEDULA) { actualizarEstado(); return; } // sin reconocimiento facial ni licencia
 				StartSdk();
 				if(bAutoRostro) openCamera();
 				else if(camera != null) { closeCamera(camera); camera = null; }
@@ -669,6 +679,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View view)
 	{
+		if(BuildConfig.SOLO_CEDULA) { abrirCedula(null, null); return; }
 		if(bSdkInit) startVerify();
 		if (!bSdkInit){
 			StartSdk();

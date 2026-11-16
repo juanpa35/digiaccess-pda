@@ -54,6 +54,19 @@ adb pull /sdcard/FaceSdk  respaldo_FaceSdk  # respaldo de la licencia
 - **Si el paquete original es `com.FaceVerifyM8` con esa misma huella:** `adb install -r DIGIACCESS-PDA.apk` reemplaza la app y conserva la licencia y los rostros.
 - **Si la huella es otra:** la licencia actual no sirve para esta app. Al abrirla, DIGIACCESS envía el código del equipo a yunatt (aparece "Licencia pendiente de aprobación") y hay que pedirles que lo aprueben. Mientras tanto, **la validación con cédula funciona igual**: solo el rostro necesita licencia.
 
+## Dos versiones del APK
+
+Cada compilación publica dos archivos. Tienen el mismo paquete y la misma firma: se instala uno encima del otro y la configuración se conserva.
+
+- **DIGIACCESS-PDA.apk** (completa): rostro y cédula. El rostro necesita la licencia del SDK facial.
+- **DIGIACCESS-PDA-CEDULA.apk** (solo cédula): no inicia el reconocimiento facial, no pide licencia ni usa la cámara. Úsela mientras llega la licencia.
+
+Descarga directa de la versión solo cédula: `https://github.com/juanpa35/digiaccess-pda/releases/latest/download/DIGIACCESS-PDA-CEDULA.apk`
+
+**Sobre la licencia facial:** en Android 11 o más nuevo, la licencia (`license.dat`) se guarda en la carpeta `FaceSdk` del almacenamiento solo si la app tiene el permiso **Acceso a todos los archivos**. Sin ese permiso queda dentro de la app y se borra al desinstalarla. Cuando active la licencia, conceda ese permiso para que sobreviva a reinstalaciones.
+
+En las dos versiones, el engranaje de la pantalla principal abre la administración (con clave).
+
 ## 4. Lector 2D del PDA
 
 La app funciona con el escáner en **cualquiera de los dos modos de salida**; no es obligatorio usar broadcast.
