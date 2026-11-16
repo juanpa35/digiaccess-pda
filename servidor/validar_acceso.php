@@ -27,7 +27,7 @@ date_default_timezone_set('America/Bogota');
 header('Content-Type: text/plain; charset=utf-8');
 header('Cache-Control: no-store');
 
-$ANTIPASSBACK = false;
+$ANTIPASSBACK = true;
 
 function respon($cod, $motivo, $nombre = '')
 {
