@@ -135,6 +135,66 @@ public final class Acceso {
         return r;
     }
 
+    /**
+     * Solo consulta: pregunta a DIGIACCESS si la persona está autorizada SIN registrar ingreso
+     * (usa prueba=1). Comprueba contra ENTRADA peatonal para mostrar la autorización base.
+     * Sin conexión, mira la última lista local sin marcar.
+     */
+    public static Resultado consultar(Context ctx, String identificacion, String medio) {
+        Config cfg = Config.load(ctx);
+        Resultado r = new Resultado();
+        r.identificacion = identificacion;
+
+        if (!cfg.validarConfigurado()) {
+            r.codigo = 0;
+            r.motivo = "SIN_CONFIGURAR";
+            return r;
+        }
+
+        try {
+            Map<String, String> p = new LinkedHashMap<>();
+            p.put("identificacion", identificacion);
+            p.put("punto", cfg.punto);
+            p.put("tipo", "ENTRADA");
+            p.put("vehicular", "PEATONAL");
+            p.put("formato", "lcd");
+            p.put("medio", medio);
+            p.put("prueba", "1");            // solo consulta: NO registra ingreso
+            String resp = postForm(cfg.validarUrl, p, 5000).trim();
+            Log.d(TAG, "consultar " + identificacion + " -> " + resp);
+
+            String[] parts = resp.split("\\|", 3);
+            r.codigo = Integer.parseInt(parts[0].trim());
+            r.motivo = parts.length > 1 ? parts[1].trim() : (r.codigo == 1 ? "OK" : "");
+            if (parts.length > 2 && parts[2].trim().length() > 0) r.nombre = parts[2].trim();
+            if (r.codigo != 1 && r.codigo != 2 && r.codigo != 4) {
+                r.codigo = 2;
+                if (r.motivo.isEmpty()) r.motivo = "ERROR_SERVIDOR";
+            }
+            return r;
+        } catch (NumberFormatException e) {
+            r.codigo = 2;
+            r.motivo = "ERROR_SERVIDOR";
+            return r;
+        } catch (Exception e) {
+            Log.w(TAG, "Sin conexión (consulta): " + e.getMessage());
+        }
+
+        r.sinConexion = true;
+        LocalStore store = LocalStore.get(ctx);
+        LocalStore.Autorizado a = store.buscarAutorizado(identificacion);
+        if (a != null) {
+            r.nombre = a.nombre != null ? a.nombre : "";
+            String motivo = store.motivoRechazoSinConexion(identificacion, cfg.carril);
+            r.codigo = motivo == null ? 1 : 2;
+            r.motivo = motivo == null ? "OK" : motivo;
+        } else {
+            r.codigo = 2;
+            r.motivo = "NO_REGISTRADO";
+        }
+        return r;
+    }
+
     // ------------------------------------------------------------------ HTTP
 
     static String postForm(String url, Map<String, String> params, int timeoutMs) throws Exception {

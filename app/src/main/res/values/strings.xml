@@ -103,6 +103,11 @@
 	<string name="acerquese">Acérquese a la cámara</string>
 	<string name="mire_pantalla">Mire la pantalla</string>
 	<string name="validar_con_cedula">Validar con cédula</string>
+	<string name="title_consulta">Consulta</string>
+	<string name="main_consultar">Consultar</string>
+	<string name="consulta_titulo">Consultar (no registra)</string>
+	<string name="consulta_escanee">Escanee o digite para consultar</string>
+	<string name="res_autorizado">Autorizado</string>
 	<string name="main_rostro">Rostro</string>
 	<string name="main_cedula">Cédula</string>
 	<string name="usar_cedula">Usar cédula</string>

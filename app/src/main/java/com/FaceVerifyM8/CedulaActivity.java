@@ -47,6 +47,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
     /** Extras opcionales para abrir esta pantalla con una lectura ya hecha (desde la pantalla principal). */
     public static final String EXTRA_RAW = "raw";
     public static final String EXTRA_TEXT = "text";
+    /** Abre la pantalla en modo solo consulta (no registra ingreso). */
+    public static final String EXTRA_CONSULTA = "consulta";
 
     private static final long VOLVER_A_ESPERA_MS = 6000;
     private static final long SALIR_POR_INACTIVIDAD_MS = 60000;
@@ -73,6 +75,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
     private TextView txtEsperaTitulo, txtEsperaAyuda, txtResultado, txtNombre, txtCedula, txtEmpresa, txtTipo, txtHora, txtMensaje;
     private TextView txtPunto, btnSentido;
 
+    /** Modo solo consulta: pregunta autorización sin registrar ingreso. */
+    private boolean consulta = false;
     private final Runnable volverAEspera = this::mostrarEspera;
     private final Runnable salir = this::finish;
 
@@ -81,6 +85,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cedula);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        consulta = getIntent().getBooleanExtra(EXTRA_CONSULTA, false);
 
         cardEspera = findViewById(R.id.cardEspera);
         cardResultado = findViewById(R.id.cardResultado);
@@ -107,8 +112,14 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         btnRostro = findViewById(R.id.btnRostro);
         btnSiguiente = findViewById(R.id.btnSiguiente);
 
-        // Sentido y carril: el operador los cambia tocando las píldoras
-        com.digiaccess.Modo.conectarPildoras(this, R.id.btnSentido, R.id.btnCarril, this::mostrarSentido);
+        if (consulta) {
+            ((TextView) findViewById(R.id.txtTituloCedula)).setText(R.string.consulta_titulo);
+            findViewById(R.id.btnSentido).setVisibility(View.GONE);
+            findViewById(R.id.btnCarril).setVisibility(View.GONE);
+        } else {
+            // Sentido y carril: el operador los cambia tocando las píldoras
+            com.digiaccess.Modo.conectarPildoras(this, R.id.btnSentido, R.id.btnCarril, this::mostrarSentido);
+        }
         btnDigitar.setOnClickListener(v -> pedirNumero(null));
         btnRostro.setOnClickListener(v -> {
             startActivity(new Intent(this, VideoActivity.class));
@@ -253,13 +264,15 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         mostrarValidando(c.numero);
 
         worker.execute(() -> {
-            Acceso.Resultado r = Acceso.validar(this, c.numero, nombreLocal, medio);
+            Acceso.Resultado r = consulta ? Acceso.consultar(this, c.numero, medio)
+                                          : Acceso.validar(this, c.numero, nombreLocal, medio);
             LocalStore.Autorizado a = LocalStore.get(this).buscarAutorizado(c.numero);
-            guardarRegistroLocal(c.numero, r);
+            if (!consulta) guardarRegistroLocal(c.numero, r);   // la consulta no deja registro
             ui.post(() -> {
                 validando = false;
                 mostrarResultado(r, c.numero, a);
-                Sonidos.resultado(r.codigo, Sonidos.frase(r, Config.SALIDA.equals(Config.load(this).sentido)));
+                if (consulta) Sonidos.resultado(r.codigo, r.permitido() ? "Autorizado" : "No autorizado");
+                else Sonidos.resultado(r.codigo, Sonidos.frase(r, Config.SALIDA.equals(Config.load(this).sentido)));
                 ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
             });
         });
@@ -294,7 +307,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         cardResultado.setVisibility(View.GONE);
         cardEspera.setVisibility(View.VISIBLE);
         ivEspera.setImageResource(R.drawable.ic_da_scan);
-        txtEsperaTitulo.setText(R.string.cedula_escanee);
+        txtEsperaTitulo.setText(consulta ? R.string.consulta_escanee : R.string.cedula_escanee);
         txtEsperaAyuda.setText(R.string.cedula_ayuda);
         botones(true);
     }
@@ -312,7 +325,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         String titulo;
         if (r.codigo == 1) {
             estilo = OK;
-            titulo = getString(Config.SALIDA.equals(Config.load(this).sentido) ? R.string.res_salida_ok : R.string.res_entrada_ok);
+            titulo = consulta ? getString(R.string.res_autorizado)
+                    : getString(Config.SALIDA.equals(Config.load(this).sentido) ? R.string.res_salida_ok : R.string.res_entrada_ok);
         } else if (r.codigo == 2) {
             estilo = ERROR;
             titulo = getString(R.string.res_denegado);
@@ -382,8 +396,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private void mostrarSentido() {
         Config cfg = Config.load(this);
-        com.digiaccess.Modo.pintar(this, R.id.btnSentido, R.id.btnCarril);
-        txtPunto.setText(com.digiaccess.Modo.puntoYCarril(cfg));
+        if (!consulta) com.digiaccess.Modo.pintar(this, R.id.btnSentido, R.id.btnCarril);
+        txtPunto.setText(consulta ? cfg.punto : com.digiaccess.Modo.puntoYCarril(cfg));
     }
 
     /** Píldora ENTRADA (verde) / SALIDA (ámbar) de la barra superior. */

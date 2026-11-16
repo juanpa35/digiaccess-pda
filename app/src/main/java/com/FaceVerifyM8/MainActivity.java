@@ -527,6 +527,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		// Sentido y carril: el operador los cambia sin clave de administrador
 		com.digiaccess.Modo.conectarSegmentos(this, R.id.segEntrada, R.id.segSalida, R.id.segPeatonal, R.id.segVehicular, this::mostrarSentido);
 		findViewById(R.id.btnCedulaMain).setOnClickListener(v -> abrirCedula(null, null));
+		findViewById(R.id.btnConsultarMain).setOnClickListener(v -> {
+			Intent it = new Intent(this, CedulaActivity.class);
+			it.putExtra(CedulaActivity.EXTRA_CONSULTA, true);
+			startActivity(it);
+		});
 		// Rostro bajo demanda: la cámara solo se abre al tocar (deja libre el lector 2D)
 		View.OnClickListener rostro = v -> {
 			if(bSdkInit) startVerify();
