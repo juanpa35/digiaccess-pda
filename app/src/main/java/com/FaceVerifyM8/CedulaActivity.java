@@ -101,6 +101,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
             startActivity(new Intent(this, VideoActivity.class));
             finish();
         });
+        MainActivity.refrescarModo(this);
         btnSiguiente.setOnClickListener(v -> mostrarEspera());
 
         scanner = new ScannerHelper(this, this);
@@ -152,8 +153,17 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         if (validando) return;
         Cedula c = Cedula.parse(raw, text);
         if (c == null) {
-            // QR de la cédula digital (cifrado) u otro código
-            mostrarAviso(getString(R.string.res_no_reconocido), getString(R.string.cedula_no_reconocida_ayuda));
+            // Diagnóstico: mostrar qué entregó el escáner (para ajustar su configuración)
+            String d = raw != null ? new String(raw, java.nio.charset.Charset.forName("ISO-8859-1"))
+                    : (text != null ? text : "");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < d.length() && sb.length() < 60; i++) {
+                char ch = d.charAt(i);
+                sb.append(ch >= 32 && ch < 127 ? ch : '·');
+            }
+            String fuente = raw != null ? "bytes" : "texto";
+            mostrarAviso(getString(R.string.res_no_reconocido),
+                    "Recibí " + fuente + " (" + d.length() + "): " + sb);
             Sonidos.resultado(2, "Cédula no reconocida. Digite el número");
             pedirNumero(null);
             return;
@@ -326,7 +336,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private void botones(boolean espera) {
         btnDigitar.setVisibility(espera ? View.VISIBLE : View.GONE);
-        btnRostro.setVisibility(espera ? View.VISIBLE : View.GONE);
+        btnRostro.setVisibility(espera && !MainActivity.bSoloCedula ? View.VISIBLE : View.GONE);
         btnSiguiente.setVisibility(espera ? View.GONE : View.VISIBLE);
     }
 
