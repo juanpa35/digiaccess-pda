@@ -147,8 +147,14 @@ public class ScannerHelper {
         for (String a : ACCIONES) f.addAction(a);
         String custom = Config.load(ctx).scannerAction;
         if (custom.length() > 0) f.addAction(custom);
-        ctx.registerReceiver(receiver, f);
-        registered = true;
+        try {
+            // El escáner es otra app: en Android 13+ el receptor debe exportarse
+            androidx.core.content.ContextCompat.registerReceiver(
+                    ctx, receiver, f, androidx.core.content.ContextCompat.RECEIVER_EXPORTED);
+            registered = true;
+        } catch (Exception e) {
+            Log.e(TAG, "No se pudo registrar el receptor del escáner", e);
+        }
     }
 
     /** Llamar en onPause. */

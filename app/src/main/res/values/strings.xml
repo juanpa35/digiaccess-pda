@@ -107,6 +107,7 @@
 	<string name="main_cedula">Cédula</string>
 	<string name="usar_cedula">Usar cédula</string>
 	<string name="toque_rostro">Toque «Rostro» o lea la cédula</string>
+	<string name="leyendo_cedula">Leyendo cédula…</string>
 	<string name="lea_cedula">Lea la cédula o toque «Cédula»</string>
 	<string name="rostro_no_listo">El reconocimiento facial aún no está listo</string>
 	<string name="siguiente_lectura">Siguiente lectura</string>

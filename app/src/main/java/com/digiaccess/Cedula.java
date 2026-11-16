@@ -81,13 +81,18 @@ public final class Cedula {
         // Escáner con formato de datos configurado (como los lectores DIGIACCESS existentes):
         // salta 48 caracteres, envía los 10 del número de documento y Enter -> llega solo "0080123456".
         String limpio = data.trim();
-        if (limpio.length() >= 3 && limpio.length() <= 12 && soloDigitos(limpio).length() == limpio.length()) {
-            String n = quitarCerosIzquierda(limpio);
-            if (!NUMERO_VALIDO.matcher(n).matches()) return null;
-            Cedula c = new Cedula();
-            c.numero = n;
-            c.origen = ORIGEN_PDF417;
-            return c;
+        String soloDig = soloDigitos(limpio);
+        // Todo dígitos: el número directo (escáner con formato) o relleno de ceros + número
+        // (p.ej. 48 ceros + 10 dígitos = 58 caracteres). Se quitan los ceros de la izquierda.
+        if (soloDig.length() >= 3 && soloDig.length() == limpio.length()) {
+            String n = quitarCerosIzquierda(soloDig);
+            if (NUMERO_VALIDO.matcher(n).matches()) {
+                Cedula c = new Cedula();
+                c.numero = n;
+                c.origen = ORIGEN_PDF417;
+                return c;
+            }
+            return null;
         }
         if (data.length() < 20) return null;
 

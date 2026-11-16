@@ -568,6 +568,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void abrirCedula(byte[] raw, String text) {
+		if(raw != null || text != null)
+			android.widget.Toast.makeText(this, R.string.leyendo_cedula, android.widget.Toast.LENGTH_SHORT).show();
 		bPause = true;
 		if(camera != null) {
 			closeCamera(camera);
