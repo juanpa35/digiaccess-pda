@@ -24,6 +24,11 @@ import com.digiaccess.Config;
 import com.digiaccess.FaceStore;
 import com.digiaccess.LocalStore;
 import com.digiaccess.ScannerHelper;
+import android.widget.EditText;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.inputmethod.InputMethodManager;
+import android.content.Context;
 import com.digiaccess.Sonidos;
 
 import java.text.SimpleDateFormat;
@@ -50,6 +55,14 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
     private static final int OK = 1, ERROR = 2, AVISO = 3;
 
     private ScannerHelper scanner;
+    private EditText capturaEscaner;
+    private final Runnable procesarCaptura = new Runnable() {
+        @Override public void run() {
+            if (capturaEscaner == null) return;
+            String s = capturaEscaner.getText().toString();
+            if (s.trim().length() >= 3) { capturaEscaner.setText(""); onScan(null, s); }
+        }
+    };
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private volatile boolean validando = false;
@@ -105,6 +118,25 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         btnSiguiente.setOnClickListener(v -> mostrarEspera());
 
         scanner = new ScannerHelper(this, this);
+
+        // Captura de escáneres en modo teclado/IME (escriben el dato en el campo enfocado).
+        capturaEscaner = findViewById(R.id.capturaEscaner);
+        if (android.os.Build.VERSION.SDK_INT >= 21) capturaEscaner.setShowSoftInputOnFocus(false);
+        capturaEscaner.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                // Al terminar la lectura (Enter o pausa) se procesa el acumulado
+                if (s.length() > 0 && (s.charAt(s.length() - 1) == '\n' || s.charAt(s.length() - 1) == '\r')) {
+                    ui.removeCallbacks(procesarCaptura);
+                    ui.post(procesarCaptura);
+                } else {
+                    ui.removeCallbacks(procesarCaptura);
+                    ui.postDelayed(procesarCaptura, 250);
+                }
+            }
+            @Override public void afterTextChanged(Editable s) { }
+        });
+
         mostrarEspera();
 
         // Lectura recibida desde la pantalla principal
@@ -120,6 +152,14 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         mostrarSentido();
         scanner.start();
         reiniciarInactividad();
+        // Mantener el foco en la casilla oculta para capturar el escáner en modo teclado/IME
+        if (capturaEscaner != null) {
+            capturaEscaner.requestFocus();
+            try {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) imm.hideSoftInputFromWindow(capturaEscaner.getWindowToken(), 0);
+            } catch (Exception ignored) { }
+        }
     }
 
     @Override

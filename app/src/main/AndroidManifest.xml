@@ -57,7 +57,7 @@
 		<activity android:name=".LicenseActivity" android:label="@string/title_license" android:theme="@style/AppThemeNoTitle" />
 		<activity android:name=".CedulaActivity" android:label="@string/title_cedula"
 			android:theme="@style/AppThemeNoTitle"
-			android:windowSoftInputMode="stateHidden" />
+			android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
 		<activity android:name=".DigiAccessActivity" android:label="@string/title_digiaccess"
 			android:theme="@style/AppThemeNoTitle"
 			android:windowSoftInputMode="stateHidden|adjustResize" />
