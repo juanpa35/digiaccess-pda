@@ -572,7 +572,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		}, 10000, 30000);
 	}
 
+	private static long tUltimaApertura = 0;
+
 	private void abrirCedula(byte[] raw, String text) {
+		// Antirrebote: una lectura duplicada no debe abrir la pantalla de cédula dos veces
+		long ahora = android.os.SystemClock.elapsedRealtime();
+		if((raw != null || text != null) && ahora - tUltimaApertura < 1500) return;
+		if(raw != null || text != null) tUltimaApertura = ahora;
 		if(raw != null || text != null)
 			android.widget.Toast.makeText(this, R.string.leyendo_cedula, android.widget.Toast.LENGTH_SHORT).show();
 		bPause = true;

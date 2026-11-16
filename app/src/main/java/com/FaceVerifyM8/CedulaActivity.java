@@ -68,6 +68,11 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private volatile boolean validando = false;
+    /** Antirrebote: el escáner puede entregar la misma lectura dos veces (broadcast + teclado). */
+    private long ultimoScanMs = 0;
+    private String ultimoDato = null;
+    private static final long REBOTE_MS = 1500;      // cualquier lectura tan seguida es copia
+    private static final long MISMA_LECTURA_MS = 5000; // la misma cédula otra vez se ignora
 
     private View cardEspera, cardResultado, btnDigitar, btnRostro, btnSiguiente, boxMensaje;
     private View divEmpresa, filaEmpresa, divTipo, filaTipo;
@@ -214,6 +219,21 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         reiniciarInactividad();
         if (validando) return;
         Cedula c = Cedula.parse(raw, text);
+        long ahora = android.os.SystemClock.elapsedRealtime();
+        String clave = c != null ? c.numero
+                : (raw != null ? new String(raw, java.nio.charset.Charset.forName("ISO-8859-1")) : String.valueOf(text)).trim();
+        if (ultimoScanMs > 0) {
+            long dt = ahora - ultimoScanMs;
+            if (dt < REBOTE_MS || (clave.equals(ultimoDato) && dt < MISMA_LECTURA_MS)) {
+                android.util.Log.d("DigiCedula", "Lectura repetida ignorada (" + dt + " ms)");
+                return;
+            }
+        }
+        ultimoScanMs = ahora;
+        ultimoDato = clave;
+        // Descartar lo que el escáner haya "tecleado" en la casilla oculta para esta misma lectura
+        ui.removeCallbacks(procesarCaptura);
+        if (capturaEscaner != null) capturaEscaner.setText("");
         if (c == null) {
             // Diagnóstico: mostrar qué entregó el escáner (para ajustar su configuración)
             String d = raw != null ? new String(raw, java.nio.charset.Charset.forName("ISO-8859-1"))
@@ -284,7 +304,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
                 mostrarResultado(r, c.numero, a);
                 if (consulta) Sonidos.resultado(r.codigo, r.permitido() ? "Autorizado" : "No autorizado");
                 else Sonidos.resultado(r.codigo, Sonidos.frase(r, Config.SALIDA.equals(Config.load(this).sentido)));
-                ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
+                if (!consulta) ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
             });
         });
     }
@@ -412,7 +432,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
     /** Resultado sin consulta al servidor (código no reconocido, número inválido). */
     private void mostrarAviso(String titulo, String mensaje) {
         pintarResultado(AVISO, titulo, null, null, null, null, mensaje, AVISO);
-        ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
+        if (!consulta) ui.postDelayed(volverAEspera, VOLVER_A_ESPERA_MS);
     }
 
     private void pintarResultado(int estilo, String titulo, String nombre, String cedula,
@@ -476,6 +496,7 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private void reiniciarInactividad() {
         ui.removeCallbacks(salir);
+        if (consulta) return; // en consulta la información queda en pantalla hasta que el operador salga
         ui.postDelayed(salir, SALIR_POR_INACTIVIDAD_MS);
     }
 
