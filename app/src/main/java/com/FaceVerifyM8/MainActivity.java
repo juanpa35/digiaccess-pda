@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.net.Uri;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
@@ -440,23 +441,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			}
 		} catch (Exception ignored) { }
 
-		// initialize directions
-		strLicPath = null;
-		// ANDROID 11 or later, Need permission to access the storage
-		if(!BuildConfig.SOLO_CEDULA && Build.VERSION.SDK_INT >= 30) {
-			if(!Environment.isExternalStorageManager()) { // No permission to access the storage
-				// ignored if the license file already exist in the APP files path, otherwise, start activity to request permission to access the storage
-				String strFilesDir = getFilesDir().getAbsolutePath();
-				if(ReadRegCode(strFilesDir + "/license.dat") == null) {
-					Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-					startActivity(intent);
-				} else strLicPath = strFilesDir;
-			}
-		}
 		strCachePath = getCacheDir().getAbsolutePath(); // read APP cache directory
 		strAppPath = getFilesDir().getAbsolutePath(); // read APP files directory
 		File localFile = new File(strAppPath);
 		if (!localFile.exists()) strAppPath = strCachePath;
+		// Ruta FIJA de la licencia facial: el SDK exige que no cambie entre arranques y que esté
+		// fuera de la app, o vuelve a pedir la licencia por internet cada vez.
+		strLicPath = resolverRutaLicencia();
 
 		// initialize UI controls
 		TextView txtDate, txtTime, txtWeek;
@@ -800,26 +791,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	{
 		if(!bSdkInit) {
 			String str = null;
-			// check license path
-			// ANDROID 11 or later, Need permission to access the storage
-			if(strLicPath == null) {
-				try {
-					strLicPath = Environment.getExternalStorageDirectory().getPath() + "/FaceSdk";
-					File localFile = new File(strLicPath);
-					if(!localFile.exists()) {
-						//noinspection StatementWithEmptyBody
-						if(!localFile.mkdir()) { }
-					}
-					if(!localFile.exists()) strLicPath = null;
-				} catch(Exception e) {
-					strLicPath = null;
-				}
-				if(strLicPath == null) {
-					strLicPath = getFilesDir().getAbsolutePath();
-					File localFile = new File(strLicPath);
-					if(!localFile.exists()) strLicPath = strCachePath;
-				}
-			}
+			// Ruta FIJA de la licencia (resuelta en onCreate). Se le indica al SDK la carpeta donde
+			// buscar/guardar la licencia (license*.dat / license*.csv), para no volver a pedirla.
+			if(strLicPath == null) strLicPath = resolverRutaLicencia();
+			IdFaceSdk.SetLicenseFilesPath(this, strLicPath);
 
 			String strLicFileName = strLicPath + "/license.dat";
 			String strRegCode = null;
@@ -1023,6 +998,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			writer.flush();
 			writer.close();
 		} catch(Exception ignored) { }
+	}
+
+	/**
+	 * Carpeta FIJA donde vive la licencia facial. El SDK exige que no cambie entre arranques y
+	 * que esté fuera de la app (SD/sistema); si no, vuelve a pedir la licencia por internet.
+	 * Preferida: /sdcard/FaceSdk (sobrevive a reinstalar la app). Sin permiso de "todos los
+	 * archivos" en Android 11+, se usa el almacenamiento externo propio de la app como respaldo.
+	 */
+	private String resolverRutaLicencia() {
+		boolean puedeExterno = Build.VERSION.SDK_INT < 30 || Environment.isExternalStorageManager();
+		if(puedeExterno) {
+			try {
+				File dir = new File(Environment.getExternalStorageDirectory(), "FaceSdk");
+				if(dir.exists() || dir.mkdirs()) return dir.getAbsolutePath();
+			} catch(Exception ignored) { }
+		} else if(!BuildConfig.SOLO_CEDULA) {
+			// Pedir "Acceso a todos los archivos" para poder usar /sdcard/FaceSdk (licencia persistente)
+			try {
+				Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+				intent.setData(Uri.parse("package:" + getPackageName()));
+				startActivity(intent);
+			} catch(Exception e) {
+				try { startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)); } catch(Exception ignored) { }
+			}
+		}
+		try {
+			File ext = getExternalFilesDir(null);
+			if(ext != null && (ext.exists() || ext.mkdirs())) return ext.getAbsolutePath();
+		} catch(Exception ignored) { }
+		return getFilesDir().getAbsolutePath();
 	}
 
 	// Read regcode from license file

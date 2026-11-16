@@ -63,7 +63,7 @@ Cada compilación publica dos archivos. Tienen el mismo paquete y la misma firma
 
 Descarga directa de la versión solo cédula: `https://github.com/juanpa35/digiaccess-pda/releases/latest/download/DIGIACCESS-PDA-CEDULA.apk`
 
-**Sobre la licencia facial:** en Android 11 o más nuevo, la licencia (`license.dat`) se guarda en la carpeta `FaceSdk` del almacenamiento solo si la app tiene el permiso **Acceso a todos los archivos**. Sin ese permiso queda dentro de la app y se borra al desinstalarla. Cuando active la licencia, conceda ese permiso para que sobreviva a reinstalaciones.
+**Sobre la licencia facial (código del equipo y por qué no se pierde):** el SDK calcula el "código del equipo" a partir de tres cosas: el equipo, la **firma** de la app y el **conjunto de permisos** que pide. Mientras no se restablezca de fábrica el Android, se firme siempre con `key.jks` y no se cambien los permisos, **el código no cambia** (reinstalar la app no lo cambia). La app guarda la licencia en una carpeta **fija** `/sdcard/FaceSdk`; para que viva ahí y sobreviva a reinstalaciones hay que darle el permiso **Acceso a todos los archivos**. Sin ese permiso la licencia queda en una carpeta de la app y se borra al desinstalar.
 
 En las dos versiones, el engranaje de la pantalla principal abre la administración (con clave).
 
