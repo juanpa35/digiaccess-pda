@@ -190,6 +190,10 @@
 	<string name="cfg_yunatt_activo">Conectar a la nube yunatt</string>
 	<string name="cfg_yunatt_servidor">Servidor yunatt</string>
 	<string name="cfg_yunatt_puerto">Puerto</string>
+	<string name="cfg_bateria_ok">Ahorro de batería: DIGIACCESS está excluida. Sigue recibiendo rostros con el PDA bloqueado.</string>
+	<string name="cfg_bateria_no">Ahorro de batería: ACTIVO para DIGIACCESS. Con el PDA bloqueado Android puede cortar la conexión con yunatt. Exclúyala.</string>
+	<string name="cfg_bateria_btn">Excluir de ahorro de batería</string>
+	<string name="cfg_bateria_guia">Busque DIGIACCESS en la lista y elija «No optimizar» (o «Sin restricciones»).</string>
 	<string name="cfg_usar_sn">Usar el SN de este equipo</string>
 	<string name="cfg_sn_equipo">SN de este equipo: %1$s (mantenga presionado para copiar)</string>
 	<string name="cfg_yunatt_sn">Número de serie (SN) del PDA en yunatt</string>

@@ -70,7 +70,46 @@ public final class YunattCliente {
     }
 
     public static synchronized void detener() {
-        if (instancia != null) instancia.hilo.execute(instancia::cerrar);
+        if (instancia != null) instancia.hilo.execute(() -> {
+            instancia.cerrar();
+            instancia.mantenerDespierto(false);
+        });
+    }
+
+    // ------------------------------------------------------------------ PDA bloqueado
+    // Con la pantalla apagada Android duerme el procesador y el wifi: el WebSocket deja de
+    // mandar el latido y yunatt no entrega rostros. Mientras la conexión esté activa se
+    // mantienen despiertos (permiso WAKE_LOCK, ya declarado).
+
+    private android.os.PowerManager.WakeLock wakeLock;
+    private android.net.wifi.WifiManager.WifiLock wifiLock;
+
+    @SuppressWarnings("deprecation")
+    private synchronized void mantenerDespierto(boolean si) {
+        try {
+            if (si) {
+                if (wakeLock == null) {
+                    android.os.PowerManager pm = (android.os.PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+                    wakeLock = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "digiaccess:yunatt");
+                    wakeLock.setReferenceCounted(false);
+                }
+                if (!wakeLock.isHeld()) wakeLock.acquire();
+                if (wifiLock == null) {
+                    android.net.wifi.WifiManager wm = (android.net.wifi.WifiManager)
+                            ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    if (wm != null) {
+                        wifiLock = wm.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF, "digiaccess:yunatt");
+                        wifiLock.setReferenceCounted(false);
+                    }
+                }
+                if (wifiLock != null && !wifiLock.isHeld()) wifiLock.acquire();
+            } else {
+                if (wakeLock != null && wakeLock.isHeld()) wakeLock.release();
+                if (wifiLock != null && wifiLock.isHeld()) wifiLock.release();
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "No se pudo mantener despierto el equipo: " + e.getMessage());
+        }
     }
 
     public static boolean conectado() {
@@ -84,9 +123,11 @@ public final class YunattCliente {
         Config cfg = Config.load(ctx);
         if (!cfg.yunattConfigurado()) {
             estado = cfg.yunattActivo ? "Falta el número de serie (SN) del PDA" : "Desactivado";
+            mantenerDespierto(false);
             return;
         }
         activo = true;
+        mantenerDespierto(true);
         String url = "ws://" + cfg.yunattServidor.trim() + ":" + cfg.yunattPuerto + "/pub/chat";
         estado = "Conectando a " + cfg.yunattServidor + "…";
         Log.i(TAG, "Conectando " + url);

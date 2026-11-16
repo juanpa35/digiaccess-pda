@@ -73,6 +73,7 @@ public class DigiAccessActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnPermArchivos).setOnClickListener(v -> abrirPermisoArchivos());
+        findViewById(R.id.btnBateria).setOnClickListener(v -> abrirAhorroBateria());
 
         Config c = Config.load(this);
         etValidarUrl.setText(c.validarUrl);
@@ -196,6 +197,29 @@ public class DigiAccessActivity extends AppCompatActivity {
         super.onResume();
         ui.post(refrescarYunatt);
         mostrarPermisoArchivos();
+        mostrarBateria();
+    }
+
+    private void mostrarBateria() {
+        TextView t = findViewById(R.id.txtBateria);
+        android.widget.Button b = findViewById(R.id.btnBateria);
+        boolean excluida = true;
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            android.os.PowerManager pm = (android.os.PowerManager) getSystemService(POWER_SERVICE);
+            excluida = pm != null && pm.isIgnoringBatteryOptimizations(getPackageName());
+        }
+        t.setText(excluida ? R.string.cfg_bateria_ok : R.string.cfg_bateria_no);
+        b.setVisibility(excluida ? android.view.View.GONE : android.view.View.VISIBLE);
+    }
+
+    private void abrirAhorroBateria() {
+        if (android.os.Build.VERSION.SDK_INT < 23) return;
+        Toast.makeText(this, R.string.cfg_bateria_guia, Toast.LENGTH_LONG).show();
+        try {
+            startActivity(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+        } catch (Exception e) {
+            try { startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS)); } catch (Exception ignored) { }
+        }
     }
 
     private boolean tieneAccesoArchivos() {

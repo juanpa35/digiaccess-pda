@@ -236,6 +236,17 @@
 				android:textSize="14sp" />
 
 			<Button android:id="@+id/btnYunattConectar" style="@style/DaBotonPlanoClaro" android:layout_marginTop="10dp" android:text="@string/cfg_yunatt_conectar" />
+
+			<TextView
+				android:id="@+id/txtBateria"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_info"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp" />
+			<Button android:id="@+id/btnBateria" style="@style/DaBotonPlanoClaro" android:layout_marginTop="8dp" android:text="@string/cfg_bateria_btn" />
 			</LinearLayout>
 
 			<TextView

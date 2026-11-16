@@ -20,8 +20,8 @@ android {
         applicationId "com.FaceVerifyM8"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 112
-        versionName "1.12-digiaccess"
+        versionCode 113
+        versionName "1.13-digiaccess"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // 启用 MultiDex
         multiDexEnabled true
