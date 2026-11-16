@@ -971,6 +971,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				byte[] str = new byte[n];
 				System.arraycopy(opt, i, str, 0, n);
 				SettingActivity.strSystemPassword = new String(str);
+				// La clave de fábrica anterior (123456) pasa a la de DIGIACCESS
+				if(SettingActivity.strSystemPassword.isEmpty() || SettingActivity.strSystemPassword.equals("123456"))
+					SettingActivity.strSystemPassword = SettingActivity.CLAVE_POR_DEFECTO;
 				i += n;
 				v = opt[i++];
 				if(v == 0x51) SettingActivity.bDebugStat = true;

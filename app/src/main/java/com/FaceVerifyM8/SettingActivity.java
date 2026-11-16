@@ -15,7 +15,9 @@ public class SettingActivity extends AppCompatActivity {
 
 	public static int nThresholdVerify = nThresholdVerifyDefault, nThresholdLive = nThresholdLiveDefault, nThresholdEyes = nThresholdEyesDefault;
 	public static boolean bLiveStat = true;
-	public static String strSystemPassword = "123456";
+	/** Clave de administrador por defecto de DIGIACCESS. */
+	public static final String CLAVE_POR_DEFECTO = "010691";
+	public static String strSystemPassword = CLAVE_POR_DEFECTO;
 
 	private boolean bLive = bLiveStat;
 

@@ -146,6 +146,7 @@ public class RecordsActivity extends AppCompatActivity {
 
 	/** Foto real, o un ícono gris centrado si no hay foto. */
 	static void marcador(ImageView iv, Bitmap bmp, int icono) {
+		if(android.os.Build.VERSION.SDK_INT >= 21) iv.setImageTintList(null);
 		if(bmp != null) {
 			iv.clearColorFilter();
 			iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
