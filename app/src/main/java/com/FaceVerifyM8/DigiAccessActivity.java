@@ -93,6 +93,9 @@ public class DigiAccessActivity extends AppCompatActivity {
         etYunattServidor.setText(c.yunattServidor);
         etYunattPuerto.setText(String.valueOf(c.yunattPuerto));
         etYunattSn.setText(c.yunattSn);
+        final String snEquipo = com.digiaccess.Dispositivo.getDeviceSn(this);
+        ((TextView) findViewById(R.id.txtSnEquipo)).setText(getString(R.string.cfg_sn_equipo, snEquipo));
+        findViewById(R.id.btnUsarSn).setOnClickListener(v -> etYunattSn.setText(snEquipo));
         mostrarEstadoLocal();
 
         findViewById(R.id.btnYunattConectar).setOnClickListener(v -> {

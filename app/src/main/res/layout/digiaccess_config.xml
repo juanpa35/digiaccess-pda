@@ -206,6 +206,15 @@
 				android:id="@+id/etYunattSn"
 				style="@style/DaCampo"
 				android:inputType="textCapCharacters" />
+			<TextView
+				android:id="@+id/txtSnEquipo"
+				style="@style/DaAyuda"
+				android:textIsSelectable="true" />
+			<Button
+				android:id="@+id/btnUsarSn"
+				style="@style/DaBotonPlanoClaro"
+				android:layout_marginTop="6dp"
+				android:text="@string/cfg_usar_sn" />
 
 			<CheckBox
 				android:id="@+id/cbYunattMarcas"

@@ -190,6 +190,8 @@
 	<string name="cfg_yunatt_activo">Conectar a la nube yunatt</string>
 	<string name="cfg_yunatt_servidor">Servidor yunatt</string>
 	<string name="cfg_yunatt_puerto">Puerto</string>
+	<string name="cfg_usar_sn">Usar el SN de este equipo</string>
+	<string name="cfg_sn_equipo">SN de este equipo: %1$s (mantenga presionado para copiar)</string>
 	<string name="cfg_yunatt_sn">Número de serie (SN) del PDA en yunatt</string>
 	<string name="cfg_yunatt_marcas">Enviar también las marcas de rostro a yunatt</string>
 	<string name="cfg_yunatt_conectar">Guardar y conectar a yunatt</string>

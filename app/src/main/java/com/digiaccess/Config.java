@@ -80,6 +80,10 @@ public final class Config {
         c.yunattServidor = p.getString("yunattServidor", "global.yunatt.com");
         c.yunattPuerto = p.getInt("yunattPuerto", 7792);
         c.yunattSn = p.getString("yunattSn", "");
+        if (c.yunattSn.trim().isEmpty()) {
+            String sn = Dispositivo.getDeviceSn(ctx);
+            if (!"unknown".equals(sn)) c.yunattSn = sn;
+        }
         c.yunattMarcas = p.getBoolean("yunattMarcas", false);
         c.autoRostro = p.getBoolean("autoRostro", false);
         c.rostroHabilitado = p.getBoolean("rostroHabilitado", false);
