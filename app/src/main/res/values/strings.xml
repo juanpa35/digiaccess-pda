@@ -179,6 +179,10 @@
 	<string name="cfg_rostro_habilitar">Habilitar reconocimiento facial</string>
 	<string name="cfg_rostro_ayuda">Apagado, la app valida solo con cédula y no pide licencia. Al habilitarlo necesita la licencia del equipo; mientras no la tenga, el rostro queda inactivo pero la cédula sigue funcionando.</string>
 	<string name="cfg_licencia">Licencia del reconocimiento facial</string>
+	<string name="cfg_perm_archivos_ok">Acceso a todos los archivos: concedido. La licencia se guarda y no se pierde al reinstalar.</string>
+	<string name="cfg_perm_archivos_no">Acceso a todos los archivos: NO concedido. Conceda para que la licencia facial no se pierda.</string>
+	<string name="cfg_perm_archivos_na">Acceso a todos los archivos: no aplica en esta versión de Android.</string>
+	<string name="cfg_perm_archivos_btn">Conceder acceso a todos los archivos</string>
 	<string name="cfg_auto_rostro">Detección automática de rostro en la pantalla principal</string>
 	<string name="cfg_auto_rostro_ayuda">Mantiene la cámara encendida. Si el lector 2D del PDA usa la cámara, la cédula no se podrá leer mientras esté activa. Recomendado: apagado (el operador toca «Rostro»).</string>
 	<string name="cfg_yunatt_titulo">Nube yunatt (rostros)</string>

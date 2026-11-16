@@ -72,6 +72,8 @@ public class DigiAccessActivity extends AppCompatActivity {
             startActivity(new Intent(this, LicenseActivity.class));
         });
 
+        findViewById(R.id.btnPermArchivos).setOnClickListener(v -> abrirPermisoArchivos());
+
         Config c = Config.load(this);
         etValidarUrl.setText(c.validarUrl);
         etSyncUrl.setText(c.syncUrl);
@@ -190,6 +192,36 @@ public class DigiAccessActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         ui.post(refrescarYunatt);
+        mostrarPermisoArchivos();
+    }
+
+    private boolean tieneAccesoArchivos() {
+        return android.os.Build.VERSION.SDK_INT < 30 || android.os.Environment.isExternalStorageManager();
+    }
+
+    private void mostrarPermisoArchivos() {
+        TextView t = findViewById(R.id.txtPermArchivos);
+        android.widget.Button b = findViewById(R.id.btnPermArchivos);
+        if (android.os.Build.VERSION.SDK_INT < 30) {
+            t.setText(R.string.cfg_perm_archivos_na);
+            b.setVisibility(android.view.View.GONE);
+            return;
+        }
+        boolean ok = android.os.Environment.isExternalStorageManager();
+        t.setText(ok ? R.string.cfg_perm_archivos_ok : R.string.cfg_perm_archivos_no);
+        b.setVisibility(ok ? android.view.View.GONE : android.view.View.VISIBLE);
+    }
+
+    private void abrirPermisoArchivos() {
+        if (android.os.Build.VERSION.SDK_INT < 30) return;
+        try {
+            Intent i = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            i.setData(android.net.Uri.parse("package:" + getPackageName()));
+            startActivity(i);
+        } catch (Exception e) {
+            try { startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)); }
+            catch (Exception ignored) { }
+        }
     }
 
     @Override

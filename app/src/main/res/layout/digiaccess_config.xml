@@ -138,6 +138,21 @@
 				android:layout_marginTop="10dp"
 				android:text="@string/cfg_licencia" />
 
+			<TextView
+				android:id="@+id/txtPermArchivos"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				android:padding="12dp"
+				android:background="@drawable/da_msg_info"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp" />
+			<Button
+				android:id="@+id/btnPermArchivos"
+				style="@style/DaBotonPlanoClaro"
+				android:layout_marginTop="8dp"
+				android:text="@string/cfg_perm_archivos_btn" />
+
 			<LinearLayout
 				android:id="@+id/seccionRostro"
 				android:layout_width="match_parent"
