@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
@@ -112,13 +113,13 @@
 			android:layout_marginBottom="12dp"
 			android:orientation="horizontal">
 			<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="3dp" android:background="@drawable/da_seg_fondo">
-				<TextView android:id="@+id/segEntrada" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/chip_entrada" android:textSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
-				<TextView android:id="@+id/segSalida" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/chip_salida" android:textSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
+				<TextView android:id="@+id/segEntrada" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/chip_entrada" android:maxLines="1" android:paddingLeft="2dp" android:paddingRight="2dp" app:autoSizeTextType="uniform" app:autoSizeMinTextSize="9sp" app:autoSizeMaxTextSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
+				<TextView android:id="@+id/segSalida" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/chip_salida" android:maxLines="1" android:paddingLeft="2dp" android:paddingRight="2dp" app:autoSizeTextType="uniform" app:autoSizeMinTextSize="9sp" app:autoSizeMaxTextSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
 			</LinearLayout>
 			<View android:layout_width="10dp" android:layout_height="1dp" />
 			<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="3dp" android:background="@drawable/da_seg_fondo">
-				<TextView android:id="@+id/segPeatonal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/carril_peatonal" android:textSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
-				<TextView android:id="@+id/segVehicular" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/carril_vehicular" android:textSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
+				<TextView android:id="@+id/segPeatonal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/carril_peatonal" android:maxLines="1" android:paddingLeft="2dp" android:paddingRight="2dp" app:autoSizeTextType="uniform" app:autoSizeMinTextSize="9sp" app:autoSizeMaxTextSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
+				<TextView android:id="@+id/segVehicular" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:gravity="center" android:text="@string/carril_vehicular" android:maxLines="1" android:paddingLeft="2dp" android:paddingRight="2dp" app:autoSizeTextType="uniform" app:autoSizeMinTextSize="9sp" app:autoSizeMaxTextSize="14sp" android:textColor="#FF9CA3AF" android:fontFamily="@font/inter_bold" android:clickable="true" android:focusable="true" />
 			</LinearLayout>
 		</LinearLayout>
 
@@ -137,22 +138,10 @@
 			</LinearLayout>
 		</LinearLayout>
 
-		<TextView
-			android:id="@+id/btnConsultarMain"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:layout_marginTop="12dp"
-			android:paddingLeft="16dp"
-			android:paddingRight="16dp"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
-			android:text="@string/main_consultar"
-			android:textColor="#CCFFFFFF"
-			android:textSize="15sp"
-			android:fontFamily="@font/inter_semibold"
-			android:clickable="true"
-			android:focusable="true" />
+		<LinearLayout android:id="@+id/btnConsultarMain" style="@style/DaBotonSecundario" android:layout_marginTop="10dp">
+			<ImageView style="@style/DaBotonIcono" android:src="@drawable/ic_da_usuario" />
+			<TextView style="@style/DaBotonTexto" android:text="@string/main_consultar" />
+		</LinearLayout>
 
 		<TextView
 			android:id="@+id/txtStat"

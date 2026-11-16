@@ -163,6 +163,21 @@
 				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_tipo" />
 				<TextView android:id="@+id/txtTipo" style="@style/DaFilaValor" />
 			</LinearLayout>
+			<View android:id="@+id/divDias" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" android:visibility="gone" />
+			<LinearLayout android:id="@+id/filaDias" style="@style/DaFila" android:visibility="gone">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_dias" />
+				<TextView android:id="@+id/txtDias" style="@style/DaFilaValor" />
+			</LinearLayout>
+			<View android:id="@+id/divVehiculo" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" android:visibility="gone" />
+			<LinearLayout android:id="@+id/filaVehiculo" style="@style/DaFila" android:visibility="gone">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_vehicular" />
+				<TextView android:id="@+id/txtVehiculo" style="@style/DaFilaValor" />
+			</LinearLayout>
+			<View android:id="@+id/divVigencia" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" android:visibility="gone" />
+			<LinearLayout android:id="@+id/filaVigencia" style="@style/DaFila" android:visibility="gone">
+				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_vigencia" />
+				<TextView android:id="@+id/txtVigencia" style="@style/DaFilaValor" />
+			</LinearLayout>
 			<View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/da_borde" />
 			<LinearLayout style="@style/DaFila">
 				<TextView style="@style/DaFilaEtiqueta" android:text="@string/fila_hora" />

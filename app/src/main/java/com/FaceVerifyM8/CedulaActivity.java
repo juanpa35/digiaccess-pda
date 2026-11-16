@@ -71,6 +71,8 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private View cardEspera, cardResultado, btnDigitar, btnRostro, btnSiguiente, boxMensaje;
     private View divEmpresa, filaEmpresa, divTipo, filaTipo;
+    private View divDias, filaDias, divVehiculo, filaVehiculo, divVigencia, filaVigencia;
+    private TextView txtDias, txtVehiculo, txtVigencia;
     private ImageView ivEspera, ivResultado, ivMensaje;
     private TextView txtEsperaTitulo, txtEsperaAyuda, txtResultado, txtNombre, txtCedula, txtEmpresa, txtTipo, txtHora, txtMensaje;
     private TextView txtPunto, btnSentido;
@@ -103,6 +105,15 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         filaEmpresa = findViewById(R.id.filaEmpresaDatos);
         divTipo = findViewById(R.id.divTipo);
         filaTipo = findViewById(R.id.filaTipo);
+        divDias = findViewById(R.id.divDias);
+        filaDias = findViewById(R.id.filaDias);
+        txtDias = findViewById(R.id.txtDias);
+        divVehiculo = findViewById(R.id.divVehiculo);
+        filaVehiculo = findViewById(R.id.filaVehiculo);
+        txtVehiculo = findViewById(R.id.txtVehiculo);
+        divVigencia = findViewById(R.id.divVigencia);
+        filaVigencia = findViewById(R.id.filaVigencia);
+        txtVigencia = findViewById(R.id.txtVigencia);
         boxMensaje = findViewById(R.id.boxMensaje);
         ivMensaje = findViewById(R.id.ivMensaje);
         txtMensaje = findViewById(R.id.txtMensaje);
@@ -304,6 +315,11 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
     private void mostrarEspera() {
         ui.removeCallbacks(volverAEspera);
+        if (divDias != null) {
+            divDias.setVisibility(View.GONE); filaDias.setVisibility(View.GONE);
+            divVehiculo.setVisibility(View.GONE); filaVehiculo.setVisibility(View.GONE);
+            divVigencia.setVisibility(View.GONE); filaVigencia.setVisibility(View.GONE);
+        }
         cardResultado.setVisibility(View.GONE);
         cardEspera.setVisibility(View.VISIBLE);
         ivEspera.setImageResource(R.drawable.ic_da_scan);
@@ -341,7 +357,56 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
 
         String empresa = a != null ? a.iddpto : null;
         String tipo = a != null ? a.tipo : null;
+        if (consulta && a == null && mensaje == null)
+            mensaje = getString(R.string.consulta_no_registrado);
         pintarResultado(estilo, titulo, r.nombre, cedula, empresa, tipo, mensaje, estiloMensaje);
+        if (consulta) pintarDetalleConsulta(a);
+    }
+
+    /** Muestra toda la autorización (días, vehicular, vigencia) desde la lista local. */
+    private void pintarDetalleConsulta(LocalStore.Autorizado a) {
+        boolean hay = a != null;
+        divDias.setVisibility(hay ? View.VISIBLE : View.GONE);
+        filaDias.setVisibility(hay ? View.VISIBLE : View.GONE);
+        divVehiculo.setVisibility(hay ? View.VISIBLE : View.GONE);
+        filaVehiculo.setVisibility(hay ? View.VISIBLE : View.GONE);
+        divVigencia.setVisibility(hay ? View.VISIBLE : View.GONE);
+        filaVigencia.setVisibility(hay ? View.VISIBLE : View.GONE);
+        if (!hay) return;
+        txtDias.setText(diasLegible(a.dias));
+        txtVehiculo.setText(vehicularLegible(a.vehicular));
+        txtVigencia.setText(fechaCorta(a.fechainicio) + " a " + fechaCorta(a.fechaterminacion));
+    }
+
+    private static String diasLegible(String d) {
+        if (d == null) return "—";
+        switch (d.trim().toLowerCase(java.util.Locale.ROOT)) {
+            case "lunesaviernes": return "Lunes a viernes";
+            case "lunesasabado": return "Lunes a sábado";
+            case "findesemana": return "Fin de semana";
+            case "todos": case "todoslosdias": case "": return "Todos los días";
+            default: return d;
+        }
+    }
+
+    private static String vehicularLegible(String v) {
+        if (v == null || v.trim().isEmpty()) return "No";
+        String u = v.trim().toUpperCase(java.util.Locale.ROOT);
+        switch (u) {
+            case "SI": return "Sí";
+            case "NO": return "No";
+            case "MOTO": return "Moto";
+            case "BICICLETA": return "Bicicleta";
+            default: return v;
+        }
+    }
+
+    /** "2026-01-31 00:00:00" -> "2026-01-31" */
+    private static String fechaCorta(String f) {
+        if (f == null || f.isEmpty()) return "—";
+        int sp = f.indexOf(' ');
+        String d = sp > 0 ? f.substring(0, sp) : f;
+        return d.replace('/', '-');
     }
 
     /** Resultado sin consulta al servidor (código no reconocido, número inválido). */

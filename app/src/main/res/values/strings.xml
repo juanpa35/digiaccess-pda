@@ -120,6 +120,10 @@
 	<string name="fila_empresa">Empresa</string>
 	<string name="fila_tipo">Tipo</string>
 	<string name="fila_hora">Hora</string>
+	<string name="fila_dias">Días</string>
+	<string name="fila_vehicular">Vehicular</string>
+	<string name="fila_vigencia">Vigencia</string>
+	<string name="consulta_no_registrado">Esta persona no está en la lista de autorizaciones vigentes.</string>
 	<string name="res_entrada_ok">Entrada\nautorizada</string>
 	<string name="res_salida_ok">Salida\nregistrada</string>
 	<string name="res_denegado">Acceso\ndenegado</string>
