@@ -7,13 +7,6 @@
 
 	<include layout="@layout/da_encabezado" />
 
-	<!-- Búsqueda (oculta, igual que en la demo original) -->
-	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone">
-		<TextView android:id="@+id/txtPromptNo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/prompt_no" />
-		<EditText android:id="@+id/txtNo" android:layout_width="180dp" android:layout_height="wrap_content" android:inputType="number" android:hint="@string/hint_no" android:autofillHints="" />
-		<Button android:id="@+id/btnSearch" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/title_search" />
-	</LinearLayout>
-
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -23,6 +16,18 @@
 		android:paddingTop="16dp">
 		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/rostros_titulo" android:textColor="@color/da_texto" android:textSize="22sp" android:fontFamily="@font/inter_bold" />
 		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/rostros_ayuda" android:textColor="@color/da_texto_2" android:textSize="13sp" />
+		<!-- Buscador: filtra mientras escribe, por nombre o cédula -->
+		<EditText
+			android:id="@+id/txtBuscar"
+			style="@style/DaCampo"
+			android:layout_marginTop="12dp"
+			android:drawableLeft="@android:drawable/ic_menu_search"
+			android:drawablePadding="8dp"
+			android:hint="@string/rostros_buscar"
+			android:inputType="textCapWords|textNoSuggestions"
+			android:imeOptions="actionSearch"
+			android:autofillHints="" />
+		<TextView android:id="@+id/txtSinResultados" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:textColor="@color/da_texto_2" android:textSize="14sp" android:visibility="gone" />
 	</LinearLayout>
 
 	<androidx.recyclerview.widget.RecyclerView

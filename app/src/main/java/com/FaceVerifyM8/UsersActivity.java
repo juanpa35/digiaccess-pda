@@ -32,8 +32,10 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 	private RecyclerView lvUser;
 	private UserAdapter adapterUser = null;
 
-	private int  nUserTotalCount = 0;
+	private int  nUserTotalCount = 0; // rostros visibles (con el filtro del buscador aplicado)
 	private boolean bRemoveAll = false;
+	private String strFiltro = "";
+	private TextView txtSinResultados;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +47,27 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 		lvUser = findViewById(R.id.lvUser);
 		lvUser.setLayoutManager(new GridLayoutManager(this, 2)); // 2 objects every row
 
-		EditText txtNo = findViewById(R.id.txtNo);
-		Button btnSearch = findViewById(R.id.btnSearch);
+		// Buscador: filtra la lista mientras se escribe (nombre o cédula, sin importar mayúsculas ni tildes)
+		EditText txtBuscar = findViewById(R.id.txtBuscar);
+		txtSinResultados = findViewById(R.id.txtSinResultados);
+		txtBuscar.addTextChangedListener(new android.text.TextWatcher() {
+			@Override public void beforeTextChanged(CharSequence cs, int a, int b, int c) { }
+			@Override public void onTextChanged(CharSequence cs, int a, int b, int c) { }
+			@Override public void afterTextChanged(android.text.Editable e) {
+				strFiltro = normalizar(e.toString());
+				updateUsers();
+			}
+		});
+		txtBuscar.setOnEditorActionListener((v, actionId, event) -> {
+			// "Buscar" en el teclado: solo lo esconde, el filtro ya está aplicado
+			android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+			if(imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+			return true;
+		});
 		Button btnAdd = findViewById(R.id.btnAdd);
 		Button btnEdit = findViewById(R.id.btnEdit);
 		Button btnRemove = findViewById(R.id.btnRemove);
 		Button btnClear = findViewById(R.id.btnClear);
-
-		btnSearch.setOnClickListener(arg0-> {
-			String strNo = txtNo.getText().toString();
-			if(strNo.isEmpty()) MainActivity.ShowDialog(this, "Buscar rostro","Escriba el número de cédula.", 0x01, null);
-
-		});
 
 		btnAdd.setOnClickListener(arg0-> {
 			if(MainActivity.nUserNum < UserDB.MAX_USER) {
@@ -111,7 +122,7 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 					}
 
 					if(nUserSelCount == 1 && unit != null) MainActivity.ShowDialog(this, "Eliminar rostros seleccionados", "¿Eliminar el rostro (" + unit.getWorkNo() + ", " + unit.getName() + ") ?", 0x03, funcRemoveUserSure);
-					else if(nUserSelCount == nUserTotalCount) MainActivity.ShowDialog(this, "Eliminar rostros seleccionados", "¿Eliminar TODOS los rostros del PDA?", 0x03, funcRemoveUserSure);
+					else if(nUserSelCount == MainActivity.nUserNum) MainActivity.ShowDialog(this, "Eliminar rostros seleccionados", "¿Eliminar TODOS los rostros del PDA?", 0x03, funcRemoveUserSure);
 					else MainActivity.ShowDialog(this, "Eliminar rostros seleccionados", "¿Eliminar todos los rostros seleccionados?", 0x03, funcRemoveUserSure);
 				}
 			}
@@ -120,11 +131,11 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 		btnClear.setOnClickListener(arg0-> {
 			// clear all users ?
 			bRemoveAll = true;
-			if(nUserTotalCount <= 0) MainActivity.ShowDialog(this, "Borrar todos los rostros", "No hay rostros para eliminar.", 0x01, null);
+			if(MainActivity.nUserNum <= 0) MainActivity.ShowDialog(this, "Borrar todos los rostros", "No hay rostros para eliminar.", 0x01, null);
 			else {
 				ListUnit unit = null;
-				if(nUserTotalCount == 1) unit = adapterUser.getItem(0);
-				if(nUserTotalCount == 1 && unit != null) MainActivity.ShowDialog(this, "Borrar todos los rostros", "¿Eliminar el rostro (" + unit.getWorkNo() + ", " + unit.getName() + ") ?", 0x03, funcRemoveUserSure);
+				if(MainActivity.nUserNum == 1 && nUserTotalCount == 1) unit = adapterUser.getItem(0);
+				if(unit != null) MainActivity.ShowDialog(this, "Borrar todos los rostros", "¿Eliminar el rostro (" + unit.getWorkNo() + ", " + unit.getName() + ") ?", 0x03, funcRemoveUserSure);
 				else MainActivity.ShowDialog(this, "Borrar todos los rostros", "¿Eliminar TODOS los rostros del PDA?", 0x03, funcRemoveUserSure);
 			}
 		});
@@ -143,6 +154,9 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 		int i, n = MainActivity.nUserNum;
 		for(i = 0; i < n; i++) {
 			UserBean user = MainActivity.userList.get(i);
+			if(!strFiltro.isEmpty()
+					&& !normalizar(user.uname).contains(strFiltro)
+					&& !normalizar(user.workno).replace(".", "").contains(strFiltro.replace(".", "").replace(" ", ""))) continue;
 
 			ListUnit unit = new ListUnit();
 			unit.setId(user.uid);
@@ -157,6 +171,26 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 
 		if(adapterUser != null) nUserTotalCount = adapterUser.getItemCount();
 		else nUserTotalCount = 0;
+
+		if(txtSinResultados != null) {
+			if(n == 0) {
+				txtSinResultados.setText("No hay rostros enrolados.");
+				txtSinResultados.setVisibility(View.VISIBLE);
+			} else if(nUserTotalCount == 0) {
+				txtSinResultados.setText("Ningún rostro coincide con la búsqueda.");
+				txtSinResultados.setVisibility(View.VISIBLE);
+			} else if(!strFiltro.isEmpty()) {
+				txtSinResultados.setText(nUserTotalCount + " de " + n + (n > 1 ? " rostros" : " rostro"));
+				txtSinResultados.setVisibility(View.VISIBLE);
+			} else txtSinResultados.setVisibility(View.GONE);
+		}
+	}
+
+	/** Minúsculas y sin tildes, para que "jose" encuentre "José". */
+	private static String normalizar(String s) {
+		if(s == null) return "";
+		String t = java.text.Normalizer.normalize(s.trim().toLowerCase(java.util.Locale.ROOT), java.text.Normalizer.Form.NFD);
+		return t.replaceAll("\\p{M}+", "");
 	}
 
 	DialogInterface.OnClickListener funcRemoveUserSure = (dialogInterface, which) -> {
@@ -178,7 +212,7 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 					ListUnit unit = adapterUser.getItem(i);
 					long uid = unit.getId();
 					if(uid != 0) {
-						for(j = 0; j < nUserTotalCount; j++) {
+						for(j = 0; j < MainActivity.userList.size(); j++) {
 							UserBean user = MainActivity.userList.get(j);
 							if(user.uid == uid) {
 								// remove user include photos from Database
@@ -189,7 +223,7 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 								if(pos != -1) {
 									IdFaceSdk.ListRemove(MainActivity.hFeatureList, pos, 1);
 
-									for(k = 0; k < nUserTotalCount; k++) {
+									for(k = 0; k < MainActivity.userList.size(); k++) {
 										UserBean u = MainActivity.userList.get(k);
 										if(u.featurePos > pos) {
 											u.featurePos--;
@@ -213,6 +247,7 @@ public class UsersActivity extends AppCompatActivity implements ListDoubleClickL
 					}
 				}
 			}
+			updateUsers(); // refresca la lista y el contador del buscador
 		}
 	};
 

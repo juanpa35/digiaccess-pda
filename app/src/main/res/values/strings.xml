@@ -145,6 +145,7 @@
 	<string name="func_exportar_sub">Copia a /Export</string>
 	<string name="func_ajustes_sub">Reconocimiento y clave</string>
 	<string name="rostros_titulo">Rostros enrolados</string>
+	<string name="rostros_buscar">Buscar por nombre o cédula</string>
 	<string name="rostros_ayuda">Toque para seleccionar; doble toque para editar.</string>
 	<string name="rostro_titulo">Enrolar rostro</string>
 	<string name="rostro_ayuda">Foto de frente, sin tapabocas y con buena luz.</string>
