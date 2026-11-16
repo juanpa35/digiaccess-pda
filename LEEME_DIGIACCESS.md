@@ -54,18 +54,16 @@ adb pull /sdcard/FaceSdk  respaldo_FaceSdk  # respaldo de la licencia
 - **Si el paquete original es `com.FaceVerifyM8` con esa misma huella:** `adb install -r DIGIACCESS-PDA.apk` reemplaza la app y conserva la licencia y los rostros.
 - **Si la huella es otra:** la licencia actual no sirve para esta app. Al abrirla, DIGIACCESS envía el código del equipo a yunatt (aparece "Licencia pendiente de aprobación") y hay que pedirles que lo aprueben. Mientras tanto, **la validación con cédula funciona igual**: solo el rostro necesita licencia.
 
-## Dos versiones del APK
+## Reconocimiento facial: apagado por defecto
 
-Cada compilación publica dos archivos. Tienen el mismo paquete y la misma firma: se instala uno encima del otro y la configuración se conserva.
+La app viene en **modo solo cédula**: valida con la cédula, **no abre la cámara y no pide ninguna licencia**. El reconocimiento facial se habilita cuando quieras desde administración:
 
-- **DIGIACCESS-PDA.apk** (completa): rostro y cédula. El rostro necesita la licencia del SDK facial.
-- **DIGIACCESS-PDA-CEDULA.apk** (solo cédula): no inicia el reconocimiento facial, no pide licencia ni usa la cámara. Úsela mientras llega la licencia.
+**Funciones** (engranaje) › **DIGIACCESS** › sección **Reconocimiento facial**:
+- Marca **Habilitar reconocimiento facial** y guarda.
+- Toca **Licencia del reconocimiento facial** para ver el código del equipo y activar (o espera a que se active sola por la nube si el proveedor ya aprobó el equipo).
+- Ahí mismo está la configuración de la **nube yunatt** (de donde bajan los rostros).
 
-Descarga directa de la versión solo cédula: `https://github.com/juanpa35/digiaccess-pda/releases/latest/download/DIGIACCESS-PDA-CEDULA.apk`
-
-**Sobre la licencia facial (código del equipo y por qué no se pierde):** el SDK calcula el "código del equipo" a partir de tres cosas: el equipo, la **firma** de la app y el **conjunto de permisos** que pide. Mientras no se restablezca de fábrica el Android, se firme siempre con `key.jks` y no se cambien los permisos, **el código no cambia** (reinstalar la app no lo cambia). La app guarda la licencia en una carpeta **fija** `/sdcard/FaceSdk`; para que viva ahí y sobreviva a reinstalaciones hay que darle el permiso **Acceso a todos los archivos**. Sin ese permiso la licencia queda en una carpeta de la app y se borra al desinstalar.
-
-En las dos versiones, el engranaje de la pantalla principal abre la administración (con clave).
+Mientras no haya licencia, el rostro queda inactivo pero **no molesta**: la cédula sigue funcionando. Cuando llegue la licencia, actívala y ya.
 
 ## 4. Lector 2D del PDA
 

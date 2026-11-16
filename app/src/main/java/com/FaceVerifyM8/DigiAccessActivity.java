@@ -1,5 +1,6 @@
 package com.FaceVerifyM8;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,7 +23,7 @@ public class DigiAccessActivity extends AppCompatActivity {
 
     private EditText etValidarUrl, etSyncUrl, etToken, etPunto, etSyncMin, etScannerAccion, etScannerExtra;
     private RadioButton rbEntrada, rbSalida, rbPeatonal, rbVehicular;
-    private CheckBox cbSinConexion, cbEliminarRostros, cbAutoRostro, cbYunattActivo, cbYunattMarcas;
+    private CheckBox cbSinConexion, cbEliminarRostros, cbAutoRostro, cbYunattActivo, cbYunattMarcas, cbRostroHabilitado;
     private EditText etYunattServidor, etYunattPuerto, etYunattSn;
     private TextView txtEstado, txtEstadoYunatt;
     private final android.os.Handler ui = new android.os.Handler();
@@ -58,6 +59,7 @@ public class DigiAccessActivity extends AppCompatActivity {
         cbSinConexion = findViewById(R.id.cbSinConexion);
         cbEliminarRostros = findViewById(R.id.cbEliminarRostros);
         txtEstado = findViewById(R.id.txtEstadoSync);
+        cbRostroHabilitado = findViewById(R.id.cbRostroHabilitado);
         cbAutoRostro = findViewById(R.id.cbAutoRostro);
         cbYunattActivo = findViewById(R.id.cbYunattActivo);
         cbYunattMarcas = findViewById(R.id.cbYunattMarcas);
@@ -65,11 +67,10 @@ public class DigiAccessActivity extends AppCompatActivity {
         etYunattPuerto = findViewById(R.id.etYunattPuerto);
         etYunattSn = findViewById(R.id.etYunattSn);
         txtEstadoYunatt = findViewById(R.id.txtEstadoYunatt);
-        if (BuildConfig.SOLO_CEDULA) {
-            findViewById(R.id.seccionRostro).setVisibility(android.view.View.GONE);
-            cbEliminarRostros.setVisibility(android.view.View.GONE);
-            findViewById(R.id.btnDepurar).setVisibility(android.view.View.GONE);
-        }
+        findViewById(R.id.btnLicencia).setOnClickListener(v -> {
+            guardar();
+            startActivity(new Intent(this, LicenseActivity.class));
+        });
 
         Config c = Config.load(this);
         etValidarUrl.setText(c.validarUrl);
@@ -83,6 +84,7 @@ public class DigiAccessActivity extends AppCompatActivity {
         (Config.VEHICULAR.equals(c.carril) ? rbVehicular : rbPeatonal).setChecked(true);
         cbSinConexion.setChecked(c.permitirSinConexion);
         cbEliminarRostros.setChecked(c.eliminarRostrosNoAutorizados);
+        cbRostroHabilitado.setChecked(c.rostroHabilitado);
         cbAutoRostro.setChecked(c.autoRostro);
         cbYunattActivo.setChecked(c.yunattActivo);
         cbYunattMarcas.setChecked(c.yunattMarcas);
@@ -94,6 +96,12 @@ public class DigiAccessActivity extends AppCompatActivity {
         findViewById(R.id.btnYunattConectar).setOnClickListener(v -> {
             guardar();
             Config cy = Config.load(this);
+            MainActivity.refrescarModo(this);
+            if (!cy.rostroHabilitado) {
+                Toast.makeText(this, R.string.cfg_rostro_habilitar, Toast.LENGTH_LONG).show();
+                cbRostroHabilitado.requestFocus();
+                return;
+            }
             if (cy.yunattActivo && cy.yunattSn.isEmpty()) {
                 Toast.makeText(this, R.string.cfg_yunatt_sn, Toast.LENGTH_LONG).show();
                 etYunattSn.requestFocus();
@@ -104,7 +112,9 @@ public class DigiAccessActivity extends AppCompatActivity {
         Button btnGuardar = findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(v -> {
             guardar();
-            if (!BuildConfig.SOLO_CEDULA) YunattCliente.reiniciar(this);
+            MainActivity.refrescarModo(this);
+            if (cbRostroHabilitado.isChecked()) YunattCliente.reiniciar(this);
+            else YunattCliente.detener();
             Toast.makeText(this, R.string.cfg_guardado, Toast.LENGTH_SHORT).show();
         });
 
@@ -156,6 +166,7 @@ public class DigiAccessActivity extends AppCompatActivity {
         c.eliminarRostrosNoAutorizados = cbEliminarRostros.isChecked();
         c.scannerAction = etScannerAccion.getText().toString();
         c.scannerExtra = etScannerExtra.getText().toString();
+        c.rostroHabilitado = cbRostroHabilitado.isChecked();
         c.autoRostro = cbAutoRostro.isChecked();
         c.yunattActivo = cbYunattActivo.isChecked();
         c.yunattMarcas = cbYunattMarcas.isChecked();

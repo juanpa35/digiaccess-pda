@@ -57,6 +57,9 @@ public final class Config {
      */
     public boolean autoRostro = false;
 
+    /** Reconocimiento facial habilitado. Apagado por defecto: así no pide licencia ni usa cámara. */
+    public boolean rostroHabilitado = false;
+
     private Config() { }
 
     public static Config load(Context ctx) {
@@ -79,6 +82,7 @@ public final class Config {
         c.yunattSn = p.getString("yunattSn", "");
         c.yunattMarcas = p.getBoolean("yunattMarcas", false);
         c.autoRostro = p.getBoolean("autoRostro", false);
+        c.rostroHabilitado = p.getBoolean("rostroHabilitado", false);
         return c;
     }
 
@@ -101,6 +105,7 @@ public final class Config {
                 .putString("yunattSn", t(yunattSn))
                 .putBoolean("yunattMarcas", yunattMarcas)
                 .putBoolean("autoRostro", autoRostro)
+                .putBoolean("rostroHabilitado", rostroHabilitado)
                 .apply();
     }
 

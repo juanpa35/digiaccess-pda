@@ -20,28 +20,13 @@ android {
         applicationId "com.FaceVerifyM8"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 103
-        versionName "1.3-digiaccess"
+        versionCode 104
+        versionName "1.4-digiaccess"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // 启用 MultiDex
         multiDexEnabled true
-    }
-    // Dos versiones con el mismo paquete y firma (se instala una encima de la otra sin perder la configuración):
-    //  - completa: rostro + cédula (necesita licencia del SDK facial)
-    //  - cedula:   solo cédula, no inicia el reconocimiento facial ni pide licencia
-    flavorDimensions "modo"
-    productFlavors {
-        completa {
-            dimension "modo"
-            buildConfigField "boolean", "SOLO_CEDULA", "false"
-            manifestPlaceholders = [appLabel: "DIGIACCESS"]
-        }
-        cedula {
-            dimension "modo"
-            buildConfigField "boolean", "SOLO_CEDULA", "true"
-            manifestPlaceholders = [appLabel: "DIGIACCESS Cédula"]
-            versionNameSuffix "-cedula"
-        }
+        // Una sola app. El reconocimiento facial viene apagado y se habilita en administración.
+        manifestPlaceholders = [appLabel: "DIGIACCESS"]
     }
     buildTypes {
         release {
@@ -64,7 +49,7 @@ android {
 	}
 	applicationVariants.configureEach {
         variant->variant.outputs.configureEach {
-            output->outputFileName = variant.flavorName == "cedula" ? "DIGIACCESS-PDA-CEDULA.apk" : "DIGIACCESS-PDA.apk"
+            output->outputFileName = "DIGIACCESS-PDA.apk"
         }
     }
 }

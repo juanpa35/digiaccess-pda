@@ -19,7 +19,8 @@ public class FunctionsActivity extends AppCompatActivity {
 		imgSetting = findViewById(R.id.imgSetting);
 		imgLoadUsers = findViewById(R.id.imgLoadUsers);
 		imgExport = findViewById(R.id.imgExport);
-		if(BuildConfig.SOLO_CEDULA) {
+		MainActivity.refrescarModo(this);
+		if(MainActivity.bSoloCedula) {
 			// Sin reconocimiento facial: no hay rostros que administrar ni cargar
 			imgUsers.setVisibility(android.view.View.INVISIBLE);
 			imgLoadUsers.setVisibility(android.view.View.INVISIBLE);

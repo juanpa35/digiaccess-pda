@@ -99,6 +99,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	/** Detección automática con la cámara encendida en la pantalla principal (Configuración DIGIACCESS). */
 	private volatile boolean bAutoRostro = false;
 	private static boolean bYunattIniciado = false;
+	/** Rostro apagado = modo solo cédula. Se habilita en administración (Config.rostroHabilitado). */
+	public static boolean bSoloCedula = true;
+
+	/** Relee de la configuración si el reconocimiento facial está habilitado. */
+	public static void refrescarModo(android.content.Context c) {
+		bSoloCedula = !com.digiaccess.Config.load(c).rostroHabilitado;
+	}
 
 	private static MediaPlayer mpWelcomeShort = null, mpWelcomeLong = null;
 	public static final String REG_URL="https://global.yunatt.com/handheldface/api/v1/applyAlgorithmLicense";
@@ -464,6 +471,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		userList = db.getUserList();
 		nUserNum = userList.size();
 
+		refrescarModo(this);
 		ReadSetting();
 
 		com.digiaccess.Voz.iniciar(this);
@@ -532,7 +540,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		findViewById(R.id.anilloRostro).setOnClickListener(rostro);
 		// Administración (clave) sin pasar por la cámara
 		findViewById(R.id.btnAjustesMain).setOnClickListener(v -> startActivity(new Intent(this, PasswordActivity.class)));
-		if(BuildConfig.SOLO_CEDULA) {
+		if(bSoloCedula) {
 			// Versión solo cédula: sin botón de rostro; el círculo abre la cédula
 			findViewById(R.id.btnRostroMain).setVisibility(View.GONE);
 			((android.widget.ImageView) findViewById(R.id.icoAnillo)).setImageResource(R.drawable.ic_da_cedula);
@@ -579,7 +587,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void actualizarEstado() {
 		String str;
-		if(BuildConfig.SOLO_CEDULA) str = "Modo cédula";
+		if(bSoloCedula) str = "Modo cédula";
 		else if(bSdkInit) {
 			if(nUserNum == 0) str = "Sin rostros enrolados: use la cédula";
 			else str = nUserNum + (nUserNum > 1 ? " rostros" : " rostro");
@@ -608,14 +616,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		if(scanner != null) scanner.start();
 
 		bPause = false;
-		bAutoRostro = !BuildConfig.SOLO_CEDULA && com.digiaccess.Config.load(this).autoRostro;
-		((TextView) findViewById(R.id.txtAcerquese)).setText(BuildConfig.SOLO_CEDULA ? R.string.lea_cedula : bAutoRostro ? R.string.acerquese : R.string.toque_rostro);
+		refrescarModo(this);
+		bAutoRostro = !bSoloCedula && com.digiaccess.Config.load(this).autoRostro;
+		((TextView) findViewById(R.id.txtAcerquese)).setText(bSoloCedula ? R.string.lea_cedula : bAutoRostro ? R.string.acerquese : R.string.toque_rostro);
 
 		// Wait a moment to start sdk and camera for GUI appear quickly
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if(BuildConfig.SOLO_CEDULA) { actualizarEstado(); return; } // sin reconocimiento facial ni licencia
+				if(bSoloCedula) { actualizarEstado(); return; } // sin reconocimiento facial ni licencia
 				StartSdk();
 				if(bAutoRostro) openCamera();
 				else if(camera != null) { closeCamera(camera); camera = null; }
@@ -670,7 +679,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View view)
 	{
-		if(BuildConfig.SOLO_CEDULA) { abrirCedula(null, null); return; }
+		if(bSoloCedula) { abrirCedula(null, null); return; }
 		if(bSdkInit) startVerify();
 		if (!bSdkInit){
 			StartSdk();
@@ -789,6 +798,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void StartSdk()
 	{
+		if(bSoloCedula) return; // reconocimiento facial deshabilitado: no inicia ni pide licencia
 		if(!bSdkInit) {
 			String str = null;
 			// Ruta FIJA de la licencia (resuelta en onCreate). Se le indica al SDK la carpeta donde
@@ -883,19 +893,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 									}
 								}
 							}
-						}else if (jsonNode.get("errCode").asInt()==505) {
-							LicenseActivity.strLicFileName = strLicFileName;
-							// save runcode file
+						}else {
+							// Sin licencia (pendiente de aprobación, código no cargado, etc.): NO se abre
+							// la pantalla de licencia ni se molesta al operador. El reconocimiento facial
+							// queda deshabilitado; se activa desde administración cuando llegue la licencia.
 							WriteLicense(strLicPath + "/device.dat", LicenseActivity.strRunCode);
-							// start license activity
-							Intent intent = new Intent(mainActivity, LicenseActivity.class);
-							startActivity(intent);
-							// 501:运行码为空
-							// 502:序列号为空
-							// 503:校验码不在有效期内
-							//504:待审批
-						}else if (jsonNode.get("errCode").asInt()==504){
-							Toast.makeText(mainActivity, R.string.pending_approval, Toast.LENGTH_LONG).show();
+							Log.d(TAG, "Sin licencia facial (errCode " + jsonNode.get("errCode").asInt() + "). Use cédula.");
 						}
 					}
 				}catch (Exception e){
@@ -1013,7 +1016,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				File dir = new File(Environment.getExternalStorageDirectory(), "FaceSdk");
 				if(dir.exists() || dir.mkdirs()) return dir.getAbsolutePath();
 			} catch(Exception ignored) { }
-		} else if(!BuildConfig.SOLO_CEDULA) {
+		} else if(!bSoloCedula) {
 			// Pedir "Acceso a todos los archivos" para poder usar /sdcard/FaceSdk (licencia persistente)
 			try {
 				Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);

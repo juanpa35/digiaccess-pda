@@ -165,6 +165,10 @@
 	<string name="cfg_sync_minutos">Sincronizar cada (minutos)</string>
 	<string name="cfg_scanner_accion">Lector 2D: acción broadcast adicional</string>
 	<string name="cfg_scanner_extra">Lector 2D: nombre del dato (extra)</string>
+	<string name="cfg_rostro_titulo">Reconocimiento facial</string>
+	<string name="cfg_rostro_habilitar">Habilitar reconocimiento facial</string>
+	<string name="cfg_rostro_ayuda">Apagado, la app valida solo con cédula y no pide licencia. Al habilitarlo necesita la licencia del equipo; mientras no la tenga, el rostro queda inactivo pero la cédula sigue funcionando.</string>
+	<string name="cfg_licencia">Licencia del reconocimiento facial</string>
 	<string name="cfg_auto_rostro">Detección automática de rostro en la pantalla principal</string>
 	<string name="cfg_auto_rostro_ayuda">Mantiene la cámara encendida. Si el lector 2D del PDA usa la cámara, la cédula no se podrá leer mientras esté activa. Recomendado: apagado (el operador toca «Rostro»).</string>
 	<string name="cfg_yunatt_titulo">Nube yunatt (rostros)</string>

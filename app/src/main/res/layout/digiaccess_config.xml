@@ -111,6 +111,33 @@
 				android:hint="@string/opcional"
 				android:inputType="text" />
 
+			<!-- Reconocimiento facial: apagado por defecto. Al habilitarlo, la app inicia el motor
+			     facial y (si hay) descarga rostros de yunatt; sin licencia queda inactivo pero no molesta. -->
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="26dp"
+				android:text="@string/cfg_rostro_titulo"
+				android:textColor="@color/da_texto"
+				android:textSize="19sp"
+				android:fontFamily="@font/inter_bold" />
+
+			<CheckBox
+				android:id="@+id/cbRostroHabilitado"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:textColor="@color/da_texto"
+				android:textSize="14sp"
+				android:text="@string/cfg_rostro_habilitar" />
+			<TextView style="@style/DaAyuda" android:text="@string/cfg_rostro_ayuda" />
+
+			<Button
+				android:id="@+id/btnLicencia"
+				style="@style/DaBotonPlanoClaro"
+				android:layout_marginTop="10dp"
+				android:text="@string/cfg_licencia" />
+
 			<LinearLayout
 				android:id="@+id/seccionRostro"
 				android:layout_width="match_parent"
