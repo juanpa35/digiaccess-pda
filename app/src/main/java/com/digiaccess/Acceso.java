@@ -48,6 +48,7 @@ public final class Acceso {
             switch (motivo == null ? "" : motivo) {
                 case "OK": base = "Acceso autorizado"; break;
                 case "NO_REGISTRADO": base = "Sin autorización vigente"; break;
+                case "NO_VIGENTE": base = "Sin autorización vigente"; break;
                 case "LISTA_NEGRA": base = "Acceso restringido"; break;
                 case "FUERA_DIA": base = "Fuera de los días autorizados"; break;
                 case "SIN_VEHICULAR": base = "Sin permiso vehicular"; break;
@@ -159,7 +160,8 @@ public final class Acceso {
             p.put("vehicular", "PEATONAL");
             p.put("formato", "lcd");
             p.put("medio", medio);
-            p.put("prueba", "1");            // solo consulta: NO registra ingreso
+            p.put("consulta", "1");          // modo consulta: autorización base, sin compuertas ni registro
+            p.put("prueba", "1");            // respaldo: si el servidor es viejo, al menos no registra
             String resp = postForm(cfg.validarUrl, p, 5000).trim();
             Log.d(TAG, "consultar " + identificacion + " -> " + resp);
 

@@ -41,6 +41,7 @@ $tipo      = isset($_POST['tipo']) ? strtoupper(trim((string)$_POST['tipo'])) : 
 $vehicular = isset($_POST['vehicular']) ? strtoupper(trim((string)$_POST['vehicular'])) : 'PEATONAL';
 $punto     = isset($_POST['punto']) ? substr(trim((string)$_POST['punto']), 0, 200) : 'PDA';
 $prueba    = isset($_POST['prueba']) && (string)$_POST['prueba'] === '1';
+$consulta  = isset($_POST['consulta']) && (string)$_POST['consulta'] === '1';
 
 if ($identificacion === '' || $identificacion === '0') respon(2, 'ID_INVALIDO');
 if ($tipo !== 'ENTRADA' && $tipo !== 'SALIDA') $tipo = 'ENTRADA';
@@ -66,6 +67,16 @@ try {
     $nombre = $a ? (string)$a['nombre'] : ($activo ? (string)$activo['nombre'] : '');
     $iddpto = $a ? (string)$a['iddpto'] : ($activo ? (string)$activo['iddpto'] : '');
     $tipoAut = $a ? (string)$a['tipo'] : '';
+
+    // Solo consulta: autorizacion base (vigencia y lista negra), SIN compuertas de
+    // dia, antipassback ni vehicular, y sin registrar nada.
+    if ($consulta) {
+        $qn = $bdd->prepare("SELECT id FROM listanegra WHERE identificacion = ? LIMIT 1");
+        $qn->execute(array($identificacion));
+        if ($qn->fetch(PDO::FETCH_ASSOC)) respon(2, 'LISTA_NEGRA', $nombre);
+        if (!$a) respon(2, 'NO_VIGENTE', $nombre);
+        respon(1, 'OK', $nombre);
+    }
 
     // Quien ya esta adentro siempre puede salir (sin cotejar vigencia/dias/vehicular/lista negra)
     $salidaLibre = ($tipo === 'SALIDA' && $activo);

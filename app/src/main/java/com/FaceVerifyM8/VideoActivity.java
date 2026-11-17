@@ -106,7 +106,8 @@ public class VideoActivity extends AppCompatActivity {
 	private Acceso.Resultado ultimoResultado = null;
 	private static final long REPETICION_MS = 60000; // tope de seguridad; la marca repetida se evita por ausencia del rostro
 	private long tRostroVisto = 0;                    // última vez que se vio un rostro (para detectar que la persona se fue)
-	private static final long AUSENCIA_MS = 2500;     // el rostro debe desaparecer este tiempo para permitir una nueva marca
+	private static final long AUSENCIA_MS = 5000;     // el rostro debe desaparecer este tiempo para permitir una nueva marca
+	private static final long RESULTADO_MS = 3800;    // cuánto se queda en pantalla la tarjeta del resultado
 	private volatile boolean consulta = false;        // modo solo consulta: no registra, muestra la autorización
 	private ScannerHelper scanner;
 
@@ -624,7 +625,7 @@ public class VideoActivity extends AppCompatActivity {
 				}
 
 				if(bPass || bFail) { // pausa para que el guarda lea el resultado
-					if((tCur - tLost) > 2500) {
+					if((tCur - tLost) > RESULTADO_MS) {
 						tLost = tCur;
 						tFace = 0;
 						nScore = 0;
