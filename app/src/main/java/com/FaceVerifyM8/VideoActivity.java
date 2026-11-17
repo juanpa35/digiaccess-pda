@@ -104,7 +104,10 @@ public class VideoActivity extends AppCompatActivity {
 	private String strUltimaCedula = null;            // evita marcar dos veces a la misma persona que sigue frente a la cámara
 	private long tUltimaCedula = 0;
 	private Acceso.Resultado ultimoResultado = null;
-	private static final long REPETICION_MS = 15000;
+	private static final long REPETICION_MS = 60000; // tope de seguridad; la marca repetida se evita por ausencia del rostro
+	private long tRostroVisto = 0;                    // última vez que se vio un rostro (para detectar que la persona se fue)
+	private static final long AUSENCIA_MS = 2500;     // el rostro debe desaparecer este tiempo para permitir una nueva marca
+	private volatile boolean consulta = false;        // modo solo consulta: no registra, muestra la autorización
 	private ScannerHelper scanner;
 
 	private boolean bDebugFps = false;
@@ -214,6 +217,13 @@ public class VideoActivity extends AppCompatActivity {
 			startActivity(new Intent(this, CedulaActivity.class));
 			finish();
 		});
+
+		consulta = getIntent().getBooleanExtra(CedulaActivity.EXTRA_CONSULTA, false);
+		if(consulta) {
+			txtTitle.setText(R.string.consulta_titulo);
+			findViewById(R.id.txtSentidoVideo).setVisibility(View.GONE);
+			findViewById(R.id.txtCarrilVideo).setVisibility(View.GONE);
+		}
 
 		Log.d(MainActivity.TAG, "VideoActivity created.");
 
@@ -606,6 +616,13 @@ public class VideoActivity extends AppCompatActivity {
 				long tCur = System.currentTimeMillis();
 				if(tCur < tFace) tFace = tCur;
 
+				// La persona dejó de estar frente a la cámara: se olvida la última marca
+				// (así, mientras siga al frente NO se marca de nuevo, y al volver otra persona sí)
+				if(strUltimaCedula != null && (tCur - tRostroVisto) > AUSENCIA_MS) {
+					strUltimaCedula = null;
+					ultimoResultado = null;
+				}
+
 				if(bPass || bFail) { // pausa para que el guarda lea el resultado
 					if((tCur - tLost) > 2500) {
 						tLost = tCur;
@@ -618,12 +635,23 @@ public class VideoActivity extends AppCompatActivity {
 					int ret = nFaceResult = VerifyUser();
 					bLive = ret >= 2;
 					boolean bGuardar = true;
-					if(ret == 3) { // Rostro reconocido: DIGIACCESS decide
+					if(ret == 3) { // Rostro reconocido
 						userPass = userLast;
+						if(consulta) { // solo consulta: mostrar la autorización, sin registrar
+							final String ced = userPass.workno;
+							bCameraRunning = false;
+							runOnUiThread(() -> {
+								Intent it = new Intent(VideoActivity.this, CedulaActivity.class);
+								it.putExtra(CedulaActivity.EXTRA_CONSULTA, true);
+								it.putExtra(CedulaActivity.EXTRA_TEXT, ced);
+								startActivity(it);
+								finish();
+							});
+							break;
+						}
 						Acceso.Resultado r;
-						long tAhora = System.currentTimeMillis();
-						if(userPass.workno.equals(strUltimaCedula) && (tAhora - tUltimaCedula) < REPETICION_MS && ultimoResultado != null) {
-							r = ultimoResultado;          // la misma persona sigue frente a la cámara: no se marca de nuevo
+						if(userPass.workno.equals(strUltimaCedula) && ultimoResultado != null) {
+							r = ultimoResultado;          // la misma persona sigue al frente: no se marca de nuevo
 							bGuardar = false;
 						} else {
 							runOnUiThread(() -> txtStat.setText("Validando…"));
@@ -715,16 +743,16 @@ public class VideoActivity extends AppCompatActivity {
 				}
 			}
 
-			// Thread delay to avoid CPU overload
+			// Pausa corta entre intentos (más baja = reconoce más rápido)
 			try {
-				Thread.sleep(300); // Wait 300 milliseconds
+				Thread.sleep(bPass || bFail ? 200 : 80);
 			} catch(Exception ignored) { }
 		}
 	};
 
 	void DetectUser()
 	{
-		if(!MainActivity.bSdkInit || bPass || bFail) return;
+		if(!MainActivity.bSdkInit) return;
 
 		FACE_DETECT_RESULT face = new FACE_DETECT_RESULT();
 		System.arraycopy(frameRgb24, 0, frameDetect, 0, iPicWidth * iPicHeight * 3);
@@ -732,6 +760,9 @@ public class VideoActivity extends AppCompatActivity {
 		long tStart = 0;
 		if(bDebugFps) tStart = System.nanoTime() / 1000000;
 		int nFaceNum = IdFaceSdk.DetectFace(frameDetect, iPicWidth, iPicHeight, face);
+		// Presencia: se actualiza aunque se esté mostrando un resultado, para saber cuándo la persona se va
+		if(nFaceNum == 1) tRostroVisto = System.currentTimeMillis();
+		if(bPass || bFail) return; // mostrando resultado: no se prepara una nueva verificación
 		if(bDebugFps) {
 			long tEnd = System.nanoTime() / 1000000;
 			Log.d(MainActivity.TAG, "Detec face return " + nFaceNum + ", Tooks " + (tEnd - tStart) + " ms");

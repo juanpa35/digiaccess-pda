@@ -138,7 +138,9 @@ public class CedulaActivity extends AppCompatActivity implements ScannerHelper.L
         }
         btnDigitar.setOnClickListener(v -> pedirNumero(null));
         btnRostro.setOnClickListener(v -> {
-            startActivity(new Intent(this, VideoActivity.class));
+            Intent it = new Intent(this, VideoActivity.class);
+            if (consulta) it.putExtra(EXTRA_CONSULTA, true);   // consultar por rostro: no registra
+            startActivity(it);
             finish();
         });
         MainActivity.refrescarModo(this);
