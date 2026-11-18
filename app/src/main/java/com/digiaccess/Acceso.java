@@ -93,7 +93,7 @@ public final class Acceso {
             p.put("vehicular", cfg.carril);
             p.put("formato", "lcd");
             p.put("medio", medio);           // validar_acceso.php lo ignora; útil si luego se quiere guardar
-            String resp = postForm(cfg.validarUrl, p, 5000).trim();
+            String resp = postForm(cfg.validarUrl, p, 2500).trim();
             Log.d(TAG, "validar " + identificacion + " -> " + resp);
 
             String[] parts = resp.split("\\|", 3);
@@ -162,7 +162,7 @@ public final class Acceso {
             p.put("medio", medio);
             p.put("consulta", "1");          // modo consulta: autorización base, sin compuertas ni registro
             p.put("prueba", "1");            // respaldo: si el servidor es viejo, al menos no registra
-            String resp = postForm(cfg.validarUrl, p, 5000).trim();
+            String resp = postForm(cfg.validarUrl, p, 2500).trim();
             Log.d(TAG, "consultar " + identificacion + " -> " + resp);
 
             String[] parts = resp.split("\\|", 3);

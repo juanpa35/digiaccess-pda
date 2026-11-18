@@ -656,7 +656,13 @@ public class VideoActivity extends AppCompatActivity {
 							bGuardar = false;
 						} else {
 							runOnUiThread(() -> txtStat.setText("Validando…"));
+							long tPet = System.currentTimeMillis();
 							r = Acceso.validar(this, userPass.workno, userPass.uname, Acceso.MEDIO_FACIAL);
+							final long msServidor = System.currentTimeMillis() - tPet;
+							final boolean offline = r.sinConexion;
+							runOnUiThread(() -> txtStat.setText(offline
+									? ("Sin conexión con el servidor (" + msServidor + " ms)")
+									: ("Servidor: " + msServidor + " ms")));
 							strUltimaCedula = userPass.workno;
 							tUltimaCedula = System.currentTimeMillis();
 							ultimoResultado = r;
