@@ -42,7 +42,9 @@ public class VideoActivity extends AppCompatActivity {
 	// Camera deirection and zoom
 	public static int[] nRotate = { 90, 270 }; // Rotate Angle (clockwise), [ 0, 90, 180, 270 ] can be supported
 	public static int[] bMirror = {  0,   1 }; // 0: Do not Mirror, 1: Left-Right Mirror
-	public static final int nZoom = 0; // Use default solution
+	// nZoom = 1: el motor procesa a MEDIA resolución (la cámara sigue capturando completo).
+	// Reduce ~4x el costo de detección/vida/comparación -> reconocimiento mucho más rápido.
+	public static final int nZoom = 1;
 
 	// Camera solution (default 640x480), can not be changed on running time
 //	public static final int iCaptureWidth = 1280;

@@ -983,6 +983,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				if(SettingActivity.nThresholdVerify < SettingActivity.nThresholdVerifyMin || SettingActivity.nThresholdVerify > SettingActivity.nThresholdVerifyMax) SettingActivity.nThresholdVerify = SettingActivity.nThresholdVerifyDefault;
 				if(SettingActivity.nThresholdLive < SettingActivity.nThresholdLiveMin || SettingActivity.nThresholdLive > SettingActivity.nThresholdLiveMax) SettingActivity.nThresholdLive = SettingActivity.nThresholdLiveDefault;
 				if(SettingActivity.nThresholdEyes < SettingActivity.nThresholdEyesMin || SettingActivity.nThresholdEyes > SettingActivity.nThresholdEyesMax) SettingActivity.nThresholdEyes = SettingActivity.nThresholdEyesDefault;
+					// Migración a media resolución (nZoom=1): un umbral guardado de la época de resolución completa (>=50) dejaría el rostro "muy pequeño".
+					if(SettingActivity.nThresholdEyes >= 50) SettingActivity.nThresholdEyes = SettingActivity.nThresholdEyesDefault;
 			}
 		} catch(Exception ignored) { }
 	}
