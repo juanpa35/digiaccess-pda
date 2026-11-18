@@ -963,7 +963,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			DataInputStream reader = new DataInputStream(new FileInputStream(strFileName));
 			if(reader.read(opt, 0, N) > 0 && opt[0] == 'V' && opt[1] == 0x53) {
 				i = 2;
-				SettingActivity.bLiveStat = (opt[i++] == 1);
+				i++; // valor guardado de prueba de vida: se ignora, queda apagada por rendimiento
+				SettingActivity.bLiveStat = false;
 				SettingActivity.nThresholdVerify = opt[i++];
 				SettingActivity.nThresholdLive = opt[i++];
 				SettingActivity.nThresholdEyes = opt[i++];

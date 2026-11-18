@@ -16,7 +16,9 @@ public class SettingActivity extends AppCompatActivity {
 	public final static int nThresholdVerifyMin = 40, nThresholdVerifyMax = 80, nThresholdLiveMin = 40, nThresholdLiveMax = 80, nThresholdEyesMin = 30, nThresholdEyesMax = 120;
 
 	public static int nThresholdVerify = nThresholdVerifyDefault, nThresholdLive = nThresholdLiveDefault, nThresholdEyes = nThresholdEyesDefault;
-	public static boolean bLiveStat = true;
+	// Prueba de vida (antispoofing) APAGADA: es el paso más pesado del reconocimiento.
+	// Apagada, el rostro se valida mucho más rápido (una foto podría pasar).
+	public static boolean bLiveStat = false;
 	/** Clave de administrador por defecto de DIGIACCESS. */
 	public static final String CLAVE_POR_DEFECTO = "010691";
 	public static String strSystemPassword = CLAVE_POR_DEFECTO;
