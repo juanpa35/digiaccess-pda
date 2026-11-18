@@ -10,10 +10,8 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingActivity extends AppCompatActivity {
-	// nThresholdEyes es la distancia mínima entre ojos en píxeles de la imagen PROCESADA.
-	// Con nZoom=1 (media resolución) se reduce a la mitad para mantener la misma distancia de lectura.
-	public final static int nThresholdVerifyDefault = 60, nThresholdLiveDefault = 65, nThresholdEyesDefault = 36;
-	public final static int nThresholdVerifyMin = 40, nThresholdVerifyMax = 80, nThresholdLiveMin = 40, nThresholdLiveMax = 80, nThresholdEyesMin = 30, nThresholdEyesMax = 120;
+	public final static int nThresholdVerifyDefault = 60, nThresholdLiveDefault = 65, nThresholdEyesDefault = 68;
+	public final static int nThresholdVerifyMin = 40, nThresholdVerifyMax = 80, nThresholdLiveMin = 40, nThresholdLiveMax = 80, nThresholdEyesMin = 60, nThresholdEyesMax = 120;
 
 	public static int nThresholdVerify = nThresholdVerifyDefault, nThresholdLive = nThresholdLiveDefault, nThresholdEyes = nThresholdEyesDefault;
 	// Prueba de vida (antispoofing) APAGADA: es el paso más pesado del reconocimiento.

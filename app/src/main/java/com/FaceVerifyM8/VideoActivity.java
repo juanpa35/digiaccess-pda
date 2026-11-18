@@ -42,9 +42,10 @@ public class VideoActivity extends AppCompatActivity {
 	// Camera deirection and zoom
 	public static int[] nRotate = { 90, 270 }; // Rotate Angle (clockwise), [ 0, 90, 180, 270 ] can be supported
 	public static int[] bMirror = {  0,   1 }; // 0: Do not Mirror, 1: Left-Right Mirror
-	// nZoom = 1: el motor procesa a MEDIA resolución (la cámara sigue capturando completo).
-	// Reduce ~4x el costo de detección/vida/comparación -> reconocimiento mucho más rápido.
-	public static final int nZoom = 1;
+	// nZoom = 0: resolución completa. A media resolución el reconocimiento bajaba de
+	// precisión (los rostros se enrolan en completa). La velocidad se gana apagando la
+	// prueba de vida, no reduciendo la resolución.
+	public static final int nZoom = 0;
 
 	// Camera solution (default 640x480), can not be changed on running time
 //	public static final int iCaptureWidth = 1280;
